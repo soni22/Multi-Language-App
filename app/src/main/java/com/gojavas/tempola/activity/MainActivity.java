@@ -29,22 +29,31 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_mainnew);
 
-
+/**
+ *setup a toolbar
+ */
         setUpToolbar();
+        /**
+         * Set up a navigation Drawer in Toolbar
+         */
+
         setUpNavDrawer();
+
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
+        /**
+         * setup a navigation view clicklistners
+         */
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         if (navigationView != null) {
             setupDrawerContent(navigationView);
         }
 
-        ImageView imageViewRound=(ImageView)findViewById(R.id.imageView_round);
+        ImageView imageViewRound = (ImageView) findViewById(R.id.imageView_round);
 
         Bitmap icon = BitmapFactory.decodeResource(getResources(), R.drawable.jennifer);
 
         imageViewRound.setImageBitmap(icon);
-
 
 
     }
