@@ -18,6 +18,7 @@ import com.gojavas.tempola.R;
 /**
  * Created by gjs331 on 6/30/2015.
  */
+
 public class MainActivity extends AppCompatActivity {
 
     private Toolbar mToolbar;
@@ -49,12 +50,12 @@ public class MainActivity extends AppCompatActivity {
             setupDrawerContent(navigationView);
         }
 
+        /**
+         * Profile Image Setup on Navigationview
+         */
         ImageView imageViewRound = (ImageView) findViewById(R.id.imageView_round);
-
         Bitmap icon = BitmapFactory.decodeResource(getResources(), R.drawable.jennifer);
-
         imageViewRound.setImageBitmap(icon);
-
 
     }
 
@@ -68,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void setUpNavDrawer() {
         if (mToolbar != null) {
+
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             mToolbar.setNavigationIcon(R.drawable.ic_menu);
             mToolbar.setTitleTextColor(Color.WHITE);
@@ -78,8 +80,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         }
-
-
     }
 
 
