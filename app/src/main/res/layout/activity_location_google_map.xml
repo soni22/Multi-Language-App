@@ -1,0 +1,96 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".TaskRoadMap" >
+
+
+    <fragment
+        android:id="@+id/map"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        class="com.google.android.gms.maps.SupportMapFragment"/>
+
+
+
+        <LinearLayout
+            android:id="@+id/notification_layout"
+            android:layout_alignParentBottom="true"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:visibility="visible"
+            >
+
+            <Button
+                android:id="@+id/map_rejected"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Rejected"/>
+
+            <Button
+                android:id="@+id/map_accepted"
+                android:layout_weight="1"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Acceptd"/>
+        </LinearLayout>
+
+        <android.widget.GridLayout
+            android:id="@+id/gridlayout_trip"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_alignParentBottom="true">
+
+            <Button
+                android:layout_row="0"
+                android:layout_column="1"
+                android:layout_columnSpan="3"
+                android:layout_gravity="center"
+                android:id="@+id/map_trip_completed_driverwalkstarted"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Trip Completed"/>
+
+            <Button
+                android:layout_gravity="center"
+
+                android:layout_row="1"
+                android:layout_column="1"
+                android:text="Distane"
+                android:layout_columnWeight="1"
+
+                android:id="@+id/map_distace"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+
+            <Button
+                android:layout_row="1"
+                android:layout_column="2"
+                android:text="Time"
+                android:layout_gravity="center"
+                android:layout_columnWeight="1"
+                android:id="@+id/map_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+
+            <Button
+                android:layout_row="1"
+                android:layout_column="3"
+                android:text="Call"
+                android:layout_columnWeight="1"
+                android:layout_gravity="center"
+
+                android:id="@+id/map_call"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+
+        </android.widget.GridLayout>
+
+
+</RelativeLayout>
