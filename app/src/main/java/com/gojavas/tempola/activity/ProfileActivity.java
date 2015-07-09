@@ -35,6 +35,7 @@ import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.StringRequest;
 import com.gojavas.tempola.R;
 import com.gojavas.tempola.application.TempolaApplication;
+import com.gojavas.tempola.network.MultipartRequest;
 import com.gojavas.tempola.utils.Utility;
 
 import org.json.JSONArray;
@@ -64,7 +65,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     EditText et_firstName,et_LastName,et_Password,et_emailid,et_phoneNumber,et_address,et_zipcode,et_bio;
     ArrayList<String> arrayList_vehicles=new ArrayList<>();
     String str_vehicletype,str_countrycode;
-    String firstName,lastName,password,emailid,phoneNumber,address,zipcode,bio;
+    String firstName,lastName,password,emailid,phoneNumber,address,zipcode,bio, mProfileImagePath;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -135,6 +136,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
                 File destination = new File(Environment.getExternalStorageDirectory(),
                         System.currentTimeMillis() + ".jpg");
+                mProfileImagePath = destination.getPath();
 
                 FileOutputStream fo;
                 try {
@@ -171,12 +173,12 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 int column_index = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
                 cursor.moveToFirst();
 
-                String selectedImagePath = cursor.getString(column_index);
+                mProfileImagePath = cursor.getString(column_index);
 
                 Bitmap bm;
                 BitmapFactory.Options options = new BitmapFactory.Options();
                 options.inJustDecodeBounds = true;
-                BitmapFactory.decodeFile(selectedImagePath, options);
+                BitmapFactory.decodeFile(mProfileImagePath, options);
                 final int REQUIRED_SIZE = 200;
                 int scale = 1;
                 while (options.outWidth / scale / 2 >= REQUIRED_SIZE
@@ -184,7 +186,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                     scale *= 2;
                 options.inSampleSize = scale;
                 options.inJustDecodeBounds = false;
-                bm = BitmapFactory.decodeFile(selectedImagePath, options);
+                bm = BitmapFactory.decodeFile(mProfileImagePath, options);
 
                 mProfileImageView.setImageBitmap(bm);
             }
@@ -210,6 +212,10 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         spinner_vehicletype=(Spinner)findViewById(R.id.spinner_vehicletype);
         btn_submit=(Button)findViewById(R.id.submitregistration);
 
+        ArrayAdapter<String> adapter_vehicle = new ArrayAdapter<String>(ProfileActivity.this, android.R.layout.simple_list_item_single_choice,arrayList_vehicles);
+        adapter_vehicle.add("Car");
+        adapter_vehicle.add("Truck");
+        spinner_vehicletype.setAdapter(adapter_vehicle);
 
         StringRequest strReq = new StringRequest(Request.Method.GET,
                 "http://tempola.in/api/public/application/types", new Response.Listener<String>() {
@@ -416,7 +422,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
     private void sendRequest() {
 
-
         firstName=et_firstName.getText().toString().trim();
         lastName=et_LastName.getText().toString().trim();
         password=et_Password.getText().toString().trim();
@@ -426,7 +431,9 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         zipcode=et_zipcode.getText().toString().trim();
         bio=et_bio.getText().toString().trim();
 
-        if (TextUtils.isEmpty(firstName)){
+        if(mProfileImagePath == null || TextUtils.isEmpty(mProfileImagePath) || !new File(mProfileImagePath).exists()) {
+            Utility.showToast(ProfileActivity.this,"Please choose a photo");
+        } else if (TextUtils.isEmpty(firstName)){
 
             Utility.showToast(ProfileActivity.this,"Please Enter First Name");
         }else if(TextUtils.isEmpty(lastName)){
@@ -452,11 +459,72 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             Utility.showToast(ProfileActivity.this,"Please Enter Bio");
         }else {
 
+            btn_submit.setText("Please wait...");
+            btn_submit.setEnabled(false);
 
+            String vehicleType = spinner_vehicletype.getSelectedItem().toString();
+            String countryFull = spinner_countryList.getSelectedItem().toString();
+            String country = countryFull.substring(countryFull.indexOf(" "));
+            JSONObject loginRequest = new JSONObject();
+            try {
+                loginRequest.put("first_name", firstName);
+                loginRequest.put("last_name", lastName);
+                loginRequest.put("email", emailid);
+                loginRequest.put("phone", phoneNumber);
+                loginRequest.put("password", password);
+                loginRequest.put("type", vehicleType);
+                loginRequest.put("device_token", Utility.getDeviceId());
+                loginRequest.put("device_type", "android");
+                loginRequest.put("bio", bio);
+                loginRequest.put("address", address);
+                loginRequest.put("state", "");
+                loginRequest.put("country", country);
+                loginRequest.put("zipcode", zipcode);
+                loginRequest.put("login_by", "manual");
 
+                MultipartRequest loginMultipartRequest = new MultipartRequest("http://tempola.in/api/public/provider/register", new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError volleyError) {
+                        btn_submit.setText("Submit");
+                        btn_submit.setEnabled(true);
+                    }
+                }, new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        btn_submit.setText("Submit");
+                        btn_submit.setEnabled(true);
+                        try {
+                            JSONObject responseObject = new JSONObject(response);
+                            String success = String.valueOf(responseObject.getBoolean("success"));
+                            if(success.contains("false")) {
+//                                JSONArray errorArray = responseObject.getJSONArray("error_messages");
+//                                int size = errorArray.length();
+//                                String errorMessage = "";
+//                                for(int i=0; i<size; i++) {
+//                                    errorMessage += errorArray.getString(i) + " ";
+//                                }
+                                String errorMessage = responseObject.getString("error");
+                                Utility.showToast(ProfileActivity.this, errorMessage);
+                            } else if(success.contains("true")) {
+                                goToSignInScreen();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new File(mProfileImagePath), loginRequest);
+                TempolaApplication.getInstance().addToRequestQueue(loginMultipartRequest);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
+    }
 
-
-
+    /**
+     * Go to sign in screen
+     */
+    private void goToSignInScreen() {
+        Intent signInIntent = new Intent(ProfileActivity.this, SignIn.class);
+        startActivity(signInIntent);
     }
 }
