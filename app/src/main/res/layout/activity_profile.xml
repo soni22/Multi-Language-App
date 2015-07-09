@@ -321,6 +321,35 @@
 
             </android.support.design.widget.TextInputLayout>
 
+            <ImageView
+                android:id="@+id/vehicle_icon"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_info"
+                android:layout_marginLeft="@dimen/sixteen"
+                android:layout_marginRight="@dimen/sixteen"
+                android:layout_alignTop="@+id/spinner_vehicletype"
+                android:layout_alignBottom="@+id/spinner_vehicletype"/>
+
+            <Spinner
+                android:id="@+id/spinner_vehicletype"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/fortyeight"
+                android:layout_below="@+id/profile_bio_layout"
+                android:layout_toRightOf="@+id/vehicle_icon"
+                android:paddingRight="@dimen/sixteen"
+                android:layout_marginTop="@dimen/eight"
+                android:layout_marginRight="@dimen/sixteen"/>
+
+            <Button
+                android:layout_below="@+id/spinner_vehicletype"
+                android:id="@+id/submitregistration"
+                android:text="Submit"
+                android:textColor="#fff"
+                android:background="@color/colorPrimary"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" />
+
         </RelativeLayout>
 
     </android.support.v4.widget.NestedScrollView>
