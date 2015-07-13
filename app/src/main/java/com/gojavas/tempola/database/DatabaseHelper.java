@@ -20,6 +20,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // Common table fields
     public static final String ID = "id";
+    public static final String USERID = "userid";
     public static final String FNAME = "fname";
     public static final String LNAME = "lname";
     public static final String PHONE = "phone";
@@ -30,7 +31,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COUNTRY = "country";
     public static final String ZIPCODE = "zipcode";
     public static final String TOKEN = "token";
-    public static final String TYPE = "type";
+    public static final String VECHILETYPE = "type";
 
 
 
@@ -52,6 +53,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         sqLiteDatabase.execSQL( "create table " + USER_TABLE_NAME + " (" +
                         ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                        USERID + " TEXT, " +
                         FNAME + " TEXT, " +
                         LNAME + " TEXT, " +
                         PHONE + " TEXT, " +
@@ -61,7 +63,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         STATE + " TEXT, " +
                         COUNTRY + " TEXT, " +
                         ZIPCODE + " TEXT, " +
-                        TYPE + " TEXT, " +
+                        VECHILETYPE + " TEXT, " +
                         TOKEN + " TEXT" +
                         ")"
         );

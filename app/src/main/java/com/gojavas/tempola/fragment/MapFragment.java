@@ -1,5 +1,7 @@
 package com.gojavas.tempola.fragment;
 
+import android.app.ProgressDialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.location.Location;
 
@@ -15,7 +17,19 @@ import android.widget.GridLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.StringRequest;
 import com.gojavas.tempola.R;
+import com.gojavas.tempola.activity.MainActivity;
+import com.gojavas.tempola.application.TempolaApplication;
+import com.gojavas.tempola.constants.Constants;
+import com.gojavas.tempola.database.UserHelper;
+import com.gojavas.tempola.entity.UserEntity;
+import com.gojavas.tempola.utils.Utility;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -34,8 +48,13 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.maps.android.ui.IconGenerator;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.text.DateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by gjs331 on 7/6/2015.
@@ -56,9 +75,11 @@ public class MapFragment extends Fragment implements LocationListener,GoogleApiC
     String mLastUpdateTime;
     GoogleMap googleMap;
     LatLng lastlatLng=null;
-    LinearLayout linearLayout_notification;
+    LinearLayout linearLayout_accept_reject;
     GridLayout gridLayout_trip;
     Button btn_accept,btn_rejected,btn_tripcompleted_driverwalkstarted,btn_call,btn_time,btn_distance;
+    ProgressDialog progressDialog;
+
 
     protected void createLocationRequest() {
         mLocationRequest = new LocationRequest();
@@ -73,6 +94,8 @@ public class MapFragment extends Fragment implements LocationListener,GoogleApiC
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        progressDialog=new ProgressDialog(getActivity());
     }
 
     @Nullable
@@ -96,7 +119,7 @@ public class MapFragment extends Fragment implements LocationListener,GoogleApiC
 
         View rootView = inflater.inflate(R.layout.activity_location_google_map, container, false);
 
-        linearLayout_notification=(LinearLayout)rootView.findViewById(R.id.notification_layout);
+        linearLayout_accept_reject=(LinearLayout)rootView.findViewById(R.id.notification_layout);
         gridLayout_trip=(GridLayout)rootView.findViewById(R.id.gridlayout_trip);
 
         btn_accept=(Button)rootView.findViewById(R.id.map_accepted);
@@ -109,6 +132,8 @@ public class MapFragment extends Fragment implements LocationListener,GoogleApiC
 
 
         btn_accept.setOnClickListener(this);
+        btn_rejected.setOnClickListener(this);
+
         return rootView;
     }
 
@@ -263,15 +288,41 @@ public class MapFragment extends Fragment implements LocationListener,GoogleApiC
     switch (v.getId()){
 
         case R.id.map_accepted:
-                linearLayout_notification.setVisibility(View.GONE);
+
+                linearLayout_accept_reject.setVisibility(View.GONE);
                 gridLayout_trip.setVisibility(View.VISIBLE);
+
 
             if (googleMap!=null)
                 googleMap.clear();
 
+            Map<String, String> params = new HashMap<String, String>();
+
+            params.put("token",Utility.getFromSharedPrefs(getActivity(),Constants.TOKEN));
+            params.put("id", Utility.getFromSharedPrefs(getActivity(),Constants.USERID));
+            params.put("request_id", "150");
+            params.put("accepted", Constants.ACCEPTED);
+
+            SendDatatoServer(Constants.REQUEST_RESPONSE_URL,params,Constants.ACCEPTED);
+
+//                params.put("device_type", "android");
+//                params.put("device_token", Utility.getDeviceId());
+//                params.put("login_by", "manual");
+
             break;
 
         case R.id.map_rejected:
+
+
+            params = new HashMap<String, String>();
+
+            params.put("token",Utility.getFromSharedPrefs(getActivity(),Constants.TOKEN));
+            params.put("id", Utility.getFromSharedPrefs(getActivity(),Constants.USERID));
+            params.put("request_id", "150");
+            params.put("accepted", Constants.REJECTED);
+
+            SendDatatoServer(Constants.REQUEST_RESPONSE_URL,params,Constants.REJECTED);
+
             break;
 
         case R.id.map_trip_completed_driverwalkstarted:
@@ -291,4 +342,101 @@ public class MapFragment extends Fragment implements LocationListener,GoogleApiC
     }
 
     }
+
+
+
+    public void showProgrss(String message){
+        if (progressDialog!=null && !progressDialog.isShowing()){
+            progressDialog.show();
+            progressDialog.setMessage(message);
+            progressDialog.setCancelable(false);
+        }
+    }
+
+
+    public void hideProgrss(){
+        if (progressDialog!=null && progressDialog.isShowing()){
+            progressDialog.dismiss();
+        }
+    }
+
+
+    private void SendDatatoServer(String url, final Map<String,String> map, final String requestAction){
+
+
+        StringRequest jsonObjRequest = new StringRequest(Request.Method.POST,
+                url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        System.out.print(response);
+
+                        hideProgrss();
+
+                        responseActtion(requestAction);
+
+                    }
+                }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                hideProgrss();
+                VolleyLog.d("volley", "Error: " + error.getMessage());
+                error.printStackTrace();
+
+                Utility.showToast(getActivity(),"Server Error");
+
+            }
+        }) {
+
+            @Override
+            public String getBodyContentType() {
+                return "application/x-www-form-urlencoded; charset=UTF-8";
+            }
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params=map;
+////                        params.put("username", etUname.getText().toString().trim());
+////                        params.put("password", etPass.getText().toString().trim());
+//
+//                params.put("email", str_email);
+//                params.put("password", str_password);
+//                params.put("device_type", "android");
+//                params.put("device_token", Utility.getDeviceId());
+//                params.put("login_by", "manual");
+//
+                return params;
+            }
+
+        };
+
+        TempolaApplication.getInstance().addToRequestQueue(jsonObjRequest);
+    }
+
+    public  void responseActtion(String responseAction){
+
+        switch (responseAction){
+
+            case Constants.REJECTED:
+                break;
+            case Constants.ACCEPTED:
+                break;
+            case Constants.DRIVER_ARRIVED:
+                break;
+            case Constants.TRIP_STARTRED:
+                break;
+            case Constants.TRIP_COMPLETED:
+                break;
+            case Constants.PROVIDER_RATING:
+                break;
+
+
+
+
+        }
+    }
+
 }

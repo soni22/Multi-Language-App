@@ -5,7 +5,7 @@ package com.gojavas.tempola.entity;
  */
 public class UserEntity {
 
-    private String id;
+    private String userid;
     private String fname;
     private String lname;
     private String phoneno;
@@ -18,15 +18,34 @@ public class UserEntity {
     private String type;
     private String token;
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getUserid() {
+        return userid;
+    }
+
+    public void setUserid(String userid) {
+        this.userid = userid;
+    }
+
+    private String email;
 
 
 
-    public String getId() {
-        return id;
+
+
+    public String getUserId() {
+        return userid;
     }
 
     public void setId(String id) {
-        this.id = id;
+        this.userid = id;
     }
 
     public String getFname() {

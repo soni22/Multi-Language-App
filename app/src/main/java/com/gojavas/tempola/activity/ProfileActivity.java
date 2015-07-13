@@ -322,13 +322,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
                                                }
                                            }
-
-
                 );
-
-
-
-
 
     }
 
@@ -341,6 +335,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
      * Get Country codes from countrycodes.txt in assests
      * @return
      */
+
     public ArrayList<String> parseCountryCodes() {
         String response = "";
         ArrayList<String> list = new ArrayList<String>();
@@ -466,7 +461,9 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             String countryFull = spinner_countryList.getSelectedItem().toString();
             String country = countryFull.substring(countryFull.indexOf(" "));
             JSONObject loginRequest = new JSONObject();
+
             try {
+
                 loginRequest.put("first_name", firstName);
                 loginRequest.put("last_name", lastName);
                 loginRequest.put("email", emailid);
