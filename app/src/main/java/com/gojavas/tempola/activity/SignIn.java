@@ -69,7 +69,7 @@ public class SignIn extends AppCompatActivity implements View.OnClickListener{
                 str_password=et_password.getText().toString().trim();
 
 
-                if (emailValidator(str_email)){
+                if (!emailValidator(str_email)){
                     Utility.showToast(SignIn.this,"Please Enter valid Email id");
                 }else if (TextUtils.isEmpty(str_password)){
                     Utility.showToast(SignIn.this,"Please Enter Password ");
