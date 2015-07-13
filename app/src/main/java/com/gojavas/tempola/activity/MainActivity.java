@@ -1,9 +1,13 @@
 package com.gojavas.tempola.activity;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -13,19 +17,37 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.StringRequest;
 import com.gojavas.tempola.R;
+import com.gojavas.tempola.application.TempolaApplication;
+import com.gojavas.tempola.constants.Constants;
 import com.gojavas.tempola.fragment.MapFragment;
+import com.gojavas.tempola.utils.Utility;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by gjs331 on 6/30/2015.
  */
 
-public class MainActivity extends ActionBarActivity {
+
+public class MainActivity extends ActionBarActivity implements CompoundButton.OnCheckedChangeListener {
 
     private Toolbar mToolbar;
     private DrawerLayout mDrawerLayout;
@@ -35,6 +57,7 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_mainnew);
+
 
 /**
  *setup a toolbar
@@ -62,6 +85,11 @@ public class MainActivity extends ActionBarActivity {
         ImageView imageViewRound = (ImageView) findViewById(R.id.imageView_round);
         Bitmap icon = BitmapFactory.decodeResource(getResources(), R.drawable.jennifer);
         imageViewRound.setImageBitmap(icon);
+
+        SwitchCompat switchCompat = (SwitchCompat) findViewById(R.id
+                .togglebutton);
+        //switchCompat.setSwitchPadding(40);
+        switchCompat.setOnCheckedChangeListener(this);
 
         Fragment fragment=new MapFragment();
 
@@ -121,4 +149,71 @@ public class MainActivity extends ActionBarActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        switch (buttonView.getId()) {
+            case R.id.togglebutton:
+
+                String str = Boolean.toString(isChecked);
+                Utility.saveToSharedPrefs(this, "toggle_state", str);
+
+                    UserState();
+
+                break;
+        }
+    }
+
+    private boolean UserState(){
+
+
+        StringRequest jsonObjRequest = new StringRequest(Request.Method.POST,
+                Constants.TOGGLE_STATE,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        System.out.print(response);
+                    }
+                }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.d("volley", "Error: " + error.getMessage());
+                error.printStackTrace();
+
+            }
+        }) {
+
+            @Override
+            public String getBodyContentType() {
+                return "application/x-www-form-urlencoded; charset=UTF-8";
+            }
+
+//            @Override
+//            protected Map<String, String> getParams() throws AuthFailureError {
+//                HashMap<String, String> map = new HashMap<String, String>();
+//                map.put("URL",Constants.TOGGLE_STATE );
+//                map.put("Params.ID", "manual");
+//                map.put("Params.TOKEN", "manual");
+//                return map;
+//            }
+
+        };
+
+        TempolaApplication.getInstance().addToRequestQueue(jsonObjRequest);
+
+
+        return false;
+    }
+
+/*
+    public boolean emailValidator(String email) {
+        Pattern pattern;
+        Matcher matcher;
+        final String EMAIL_PATTERN = "^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+        pattern = Pattern.compile(EMAIL_PATTERN);
+        matcher = pattern.matcher(email);
+        return matcher.matches();
+    }*/
+
 }

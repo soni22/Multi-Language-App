@@ -11,4 +11,7 @@
     <string name="action_example">Example action</string>
 
     <string name="action_settings">Settings</string>
+
+    <string name="togglebutton">Button</string>
+    <string name="tvtitle">TextView</string>
 </resources>

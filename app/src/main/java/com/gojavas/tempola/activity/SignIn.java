@@ -128,7 +128,6 @@ public class SignIn extends AppCompatActivity implements View.OnClickListener{
 
 
                 if (!emailValidator(str_email)){
-
                     Utility.showToast(SignIn.this,"Please Enter valid Email id");
 
                 }else if (TextUtils.isEmpty(str_password)){
