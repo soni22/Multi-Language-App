@@ -1,8 +1,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".TaskRoadMap" >
+    tools:context=".TaskRoadMap">
 
 
     <fragment
@@ -11,88 +12,91 @@
         android:layout_height="wrap_content"
         class="com.google.android.gms.maps.SupportMapFragment"/>
 
-
-
         <LinearLayout
             android:id="@+id/notification_layout"
             android:layout_alignParentBottom="true"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:visibility="visible"
-            >
+            android:visibility="visible">
 
             <Button
                 android:id="@+id/map_rejected"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                android:background="@color/colorAccent"
                 android:layout_weight="1"
                 android:text="Rejected"
-                android:visibility="gone"/>
+                android:visibility="gone"
+                android:textColor="@color/white"/>
 
             <Button
                 android:id="@+id/map_accepted"
                 android:layout_weight="1"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="Acceptd"
-                android:visibility="gone"/>
+                android:text="Accepted"
+                android:visibility="gone"
+                android:background="@color/colorPrimary"
+                android:textColor="@color/white"/>
+
         </LinearLayout>
 
-        <android.widget.GridLayout
-            android:id="@+id/gridlayout_trip"
-            android:layout_width="fill_parent"
+    <RelativeLayout
+        android:id="@+id/map_bottom_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:visibility="gone">
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/map_call"
             android:layout_height="wrap_content"
-            android:visibility="gone"
-            android:layout_alignParentBottom="true">
+            android:layout_width="wrap_content"
+            android:layout_above="@+id/map_distance_time_layout"
+            android:layout_alignParentRight="true"
+            android:layout_margin="@dimen/eight"
+            android:src="@drawable/ic_call"
+            android:clickable="true"/>
 
-            <Button
-                android:layout_row="0"
-                android:layout_column="1"
-                android:layout_columnSpan="3"
-                android:layout_gravity="center"
-                android:id="@+id/map_trip_completed_driverwalkstarted"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:text="Trip Completed"/>
+        <LinearLayout
+            android:id="@+id/map_distance_time_layout"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:background="@color/colorPrimary"
+            android:layout_above="@+id/map_trip_completed_driverwalkstarted">
 
-            <Button
-                android:layout_gravity="center"
+            <TextView
+                android:id="@+id/map_distance"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/fortyeight"
+                android:layout_weight="1"
+                android:layout_gravity="bottom"
+                android:gravity="center"
+                android:text="Distance"
+                android:textColor="@color/white"/>
 
-                android:layout_row="1"
-                android:layout_column="1"
-                android:text="Distane"
-                android:layout_columnWeight="1"
-
-                android:id="@+id/map_distace"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-
-            <Button
-                android:layout_row="1"
-                android:layout_column="2"
-                android:text="Time"
-                android:layout_gravity="center"
-                android:layout_columnWeight="1"
+            <TextView
                 android:id="@+id/map_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_width="0dp"
+                android:layout_height="@dimen/fortyeight"
+                android:layout_weight="1"
+                android:layout_gravity="bottom"
+                android:gravity="center"
+                android:text="Time"
+                android:textColor="@color/white"/>
 
+        </LinearLayout>
 
-            <Button
-                android:layout_row="1"
-                android:layout_column="3"
-                android:text="Call"
-                android:layout_columnWeight="1"
-                android:layout_gravity="center"
+        <Button
+            android:id="@+id/map_trip_completed_driverwalkstarted"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimaryDark"
+            android:layout_alignParentBottom="true"
+            android:text="Driver Arrived"
+            android:textColor="@color/white"/>
 
-                android:id="@+id/map_call"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-
-        </android.widget.GridLayout>
-
+    </RelativeLayout>
 
 </RelativeLayout>
