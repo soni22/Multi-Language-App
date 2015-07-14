@@ -30,6 +30,7 @@ import com.gojavas.tempola.database.UserHelper;
 import com.gojavas.tempola.entity.UserEntity;
 import com.gojavas.tempola.gcm.QuickstartPreferences;
 import com.gojavas.tempola.gcm.RegistrationIntentService;
+import com.gojavas.tempola.services.SendLocation;
 import com.gojavas.tempola.utils.Utility;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -67,6 +68,9 @@ public class SignIn extends AppCompatActivity implements View.OnClickListener{
         et_email=(EditText)findViewById(R.id.signin_email);
         et_password=(EditText)findViewById(R.id.signin_password);
 
+        et_email.setText("varunjain@abc.com");
+        et_password.setText("123456");
+
         progressDialog=new ProgressDialog(SignIn.this);
 
         btn_signIn.setOnClickListener(this);
@@ -78,7 +82,8 @@ public class SignIn extends AppCompatActivity implements View.OnClickListener{
             @Override
             public void onReceive(Context context, Intent intent) {
 
-                validateUser();
+                String token=intent.getStringExtra(Constants.TOKEN);
+                validateUser(token);
 
 //
 //                SharedPreferences sharedPreferences =
@@ -174,7 +179,7 @@ public class SignIn extends AppCompatActivity implements View.OnClickListener{
     }
 
 
-    private boolean validateUser(){
+    private boolean validateUser(final String token){
 
 
         StringRequest jsonObjRequest = new StringRequest(Request.Method.POST,
@@ -240,12 +245,17 @@ public class SignIn extends AppCompatActivity implements View.OnClickListener{
                                 userEntity.setType(jsonObject.getString("type"));
 
                                 Utility.saveToSharedPrefs(SignIn.this, Constants.TOKEN, token);
-                                Utility.saveToSharedPrefs(SignIn.this,Constants.USERID,id);
+                                Utility.saveToSharedPrefs(SignIn.this, Constants.USERID, id);
 
                                 UserHelper.getInstance().insertOrUpdate(userEntity);
 
+                                Intent intent=new Intent(SignIn.this, SendLocation.class);
+                                startService(intent);
+
                                 Intent intentSubmit=new Intent(SignIn.this,MainActivity.class);
                                 startActivity(intentSubmit);
+
+
                             }
 
                         } catch (JSONException e) {
@@ -285,7 +295,7 @@ public class SignIn extends AppCompatActivity implements View.OnClickListener{
                 params.put("email", str_email);
                 params.put("password", str_password);
                 params.put("device_type", "android");
-                params.put("device_token", Utility.getDeviceId());
+                params.put("device_token",token);
                 params.put("login_by", "manual");
 
                 return params;

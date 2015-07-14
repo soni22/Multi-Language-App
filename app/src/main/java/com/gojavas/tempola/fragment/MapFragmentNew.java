@@ -29,7 +29,6 @@ import com.gojavas.tempola.application.TempolaApplication;
 import com.gojavas.tempola.constants.Constants;
 import com.gojavas.tempola.database.UserHelper;
 import com.gojavas.tempola.entity.UserEntity;
-import com.gojavas.tempola.utils.LocationUtils;
 import com.gojavas.tempola.utils.Utility;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -60,7 +59,8 @@ import java.util.Map;
 /**
  * Created by gjs331 on 7/6/2015.
  */
-public class MapFragment extends Fragment implements View.OnClickListener, LocationUtils.OnLocationReceivedIn{
+public class MapFragmentNew extends Fragment implements LocationListener,GoogleApiClient
+        .ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,View.OnClickListener {
 
 
     static boolean lastlocation=true;
@@ -80,7 +80,6 @@ public class MapFragment extends Fragment implements View.OnClickListener, Locat
     GridLayout gridLayout_trip;
     Button btn_accept,btn_rejected,btn_tripcompleted_driverwalkstarted,btn_call,btn_time,btn_distance;
     ProgressDialog progressDialog;
-    LocationUtils  locationUtils;
 
 
     protected void createLocationRequest() {
@@ -98,8 +97,6 @@ public class MapFragment extends Fragment implements View.OnClickListener, Locat
         super.onCreate(savedInstanceState);
 
         progressDialog=new ProgressDialog(getActivity());
-
-
     }
 
     @Nullable
@@ -112,15 +109,14 @@ public class MapFragment extends Fragment implements View.OnClickListener, Locat
         if (!isGooglePlayServicesAvailable()) {
             getActivity().finish();
         }
-        //createLocationRequest();
+        createLocationRequest();
 
-        locationUtils=new LocationUtils(getActivity(), this);
-//
-//        mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
-//                .addApi(LocationServices.API)
-//                .addConnectionCallbacks(this)
-//                .addOnConnectionFailedListener(this)
-//                .build();
+
+        mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
+                .addApi(LocationServices.API)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .build();
 
         View rootView = inflater.inflate(R.layout.activity_location_google_map, container, false);
 
@@ -161,17 +157,15 @@ public class MapFragment extends Fragment implements View.OnClickListener, Locat
     public void onStart() {
         super.onStart();
         Log.d(TAG, "onStart fired ..............");
-//        mGoogleApiClient.connect();
-locationUtils.googleApiConnect();
+        mGoogleApiClient.connect();
+
     }
 
     @Override
     public void onResume() {
         super.onResume();
-//        if (mGoogleApiClient.isConnected()) {
-//            startLocationUpdates();
-        if (locationUtils.isGoogleApiConnect()){
-            locationUtils.startLocationUpdates();
+        if (mGoogleApiClient.isConnected()) {
+            startLocationUpdates();
             Log.d(TAG, "Location update resumed .....................");
         }
     }
@@ -181,10 +175,7 @@ locationUtils.googleApiConnect();
     @Override
     public void onPause() {
         super.onPause();
-//        stopLocationUpdates();
-
-        locationUtils.stopLocationUpdates();
-
+        stopLocationUpdates();
     }
 
 
@@ -193,23 +184,20 @@ locationUtils.googleApiConnect();
     public void onStop() {
         super.onStop();
         Log.d(TAG, "onStop fired ..............");
-//        mGoogleApiClient.disconnect();
-//        Log.d(TAG, "isConnected ...............: " + mGoogleApiClient.isConnected());
+        mGoogleApiClient.disconnect();
+        Log.d(TAG, "isConnected ...............: " + mGoogleApiClient.isConnected());
     }
-   /* @Override
+    @Override
     public void onLocationChanged(Location location) {
 
-        if(location !=null){
         Log.d(TAG, "Firing onLocationChanged..............................................");
         mCurrentLocation = location;
         mLastUpdateTime = DateFormat.getTimeInstance().format(new Date());
 
         addMarker();
-        }
 
 
-
-    }*/
+    }
 
 
     private void addMarker() {
@@ -244,10 +232,9 @@ locationUtils.googleApiConnect();
         lastlatLng=currentLatLng;
         Log.d(TAG, "Marker added.............................");
 
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng,
-                13));
-
         if (lastlocation==true){
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng,
+                    13));
             lastlocation=false;
         }
 
@@ -255,23 +242,19 @@ locationUtils.googleApiConnect();
     }
 
 
-/*
     @Override
     public void onConnected(Bundle bundle) {
         Log.d(TAG, "onConnected - isConnected ...............: " + mGoogleApiClient.isConnected());
-//        startLocationUpdates();
-        locationUtils.startLocationUpdates();
+        startLocationUpdates();
     }
-*/
 
-   /* protected void startLocationUpdates() {
+    protected void startLocationUpdates() {
         PendingResult<Status> pendingResult = LocationServices.FusedLocationApi.requestLocationUpdates(
                 mGoogleApiClient, mLocationRequest, this);
         Log.d(TAG, "Location update started ..............: ");
-    }*/
+    }
 
 
-/*
     @Override
     public void onConnectionSuspended(int i) {
 
@@ -282,7 +265,6 @@ locationUtils.googleApiConnect();
         Log.d(TAG, "Connection failed: " + connectionResult.toString());
     }
 
-*/
 
     private boolean isGooglePlayServicesAvailable() {
         int status = GooglePlayServicesUtil.isGooglePlayServicesAvailable(getActivity());
@@ -294,71 +276,71 @@ locationUtils.googleApiConnect();
         }
     }
 
-/*
+
     protected void stopLocationUpdates() {
         LocationServices.FusedLocationApi.removeLocationUpdates(
                 mGoogleApiClient, this);
         Log.d(TAG, "Location update stopped .......................");
-    }*/
+    }
 
     @Override
     public void onClick(View v) {
 
-    switch (v.getId()){
+        switch (v.getId()){
 
-        case R.id.map_accepted:
+            case R.id.map_accepted:
 
                 linearLayout_accept_reject.setVisibility(View.GONE);
                 gridLayout_trip.setVisibility(View.VISIBLE);
 
 
-            if (googleMap!=null)
-                googleMap.clear();
+                if (googleMap!=null)
+                    googleMap.clear();
 
-            Map<String, String> params = new HashMap<String, String>();
+                Map<String, String> params = new HashMap<String, String>();
 
-            params.put("token",Utility.getFromSharedPrefs(getActivity(),Constants.TOKEN));
-            params.put("id", Utility.getFromSharedPrefs(getActivity(),Constants.USERID));
-            params.put("request_id", "150");
-            params.put("accepted", Constants.ACCEPTED_STATE);
+                params.put("token",Utility.getFromSharedPrefs(getActivity(),Constants.TOKEN));
+                params.put("id", Utility.getFromSharedPrefs(getActivity(),Constants.USERID));
+                params.put("request_id", "150");
+                params.put("accepted", Constants.ACCEPTED_STATE);
 
-            SendDatatoServer(Constants.REQUEST_RESPONSE_URL,params,Constants.ACCEPTED_STATE);
+                SendDatatoServer(Constants.REQUEST_RESPONSE_URL,params,Constants.ACCEPTED_STATE);
 
 //                params.put("device_type", "android");
 //                params.put("device_token", Utility.getDeviceId());
 //                params.put("login_by", "manual");
 
-            break;
+                break;
 
-        case R.id.map_rejected:
-
-
-            params = new HashMap<String, String>();
-
-            params.put("token",Utility.getFromSharedPrefs(getActivity(),Constants.TOKEN));
-            params.put("id", Utility.getFromSharedPrefs(getActivity(),Constants.USERID));
-            params.put("request_id", "150");
-            params.put("accepted", Constants.REJECTED_STATE);
-
-            SendDatatoServer(Constants.REQUEST_RESPONSE_URL,params,Constants.REJECTED_STATE);
-
-            break;
-
-        case R.id.map_trip_completed_driverwalkstarted:
-            break;
+            case R.id.map_rejected:
 
 
-        case R.id.map_call:
-            break;
+                params = new HashMap<String, String>();
+
+                params.put("token",Utility.getFromSharedPrefs(getActivity(),Constants.TOKEN));
+                params.put("id", Utility.getFromSharedPrefs(getActivity(),Constants.USERID));
+                params.put("request_id", "150");
+                params.put("accepted", Constants.REJECTED_STATE);
+
+                SendDatatoServer(Constants.REQUEST_RESPONSE_URL,params,Constants.REJECTED_STATE);
+
+                break;
+
+            case R.id.map_trip_completed_driverwalkstarted:
+                break;
 
 
-        case R.id.map_time:
-            break;
+            case R.id.map_call:
+                break;
 
 
-        case R.id.map_distace:
-            break;
-    }
+            case R.id.map_time:
+                break;
+
+
+            case R.id.map_distace:
+                break;
+        }
 
     }
 
@@ -458,18 +440,4 @@ locationUtils.googleApiConnect();
         }
     }
 
-    @Override
-    public void onLocationReceived(Location location) {
-
-        Log.d(TAG, "Firing onLocationChanged..............................................");
-  if (location!=null){
-      mCurrentLocation = location;
-      mLastUpdateTime = DateFormat.getTimeInstance().format(new Date());
-
-      addMarker();
-
-  }
-
-
-    }
 }
