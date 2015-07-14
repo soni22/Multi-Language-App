@@ -64,7 +64,7 @@ public class MapFragment extends Fragment implements View.OnClickListener, Locat
 
 
     static boolean lastlocation=true;
-
+    String msg;
     private static final String TAG = "LocationActivity";
     private static final long INTERVAL = 1000 * 60 * 1; //1 minute
     private static final long FASTEST_INTERVAL = 1000 * 60 * 1; // 1 minute
@@ -98,7 +98,6 @@ public class MapFragment extends Fragment implements View.OnClickListener, Locat
         super.onCreate(savedInstanceState);
 
         progressDialog=new ProgressDialog(getActivity());
-
 
     }
 
@@ -139,6 +138,7 @@ public class MapFragment extends Fragment implements View.OnClickListener, Locat
         btn_accept.setOnClickListener(this);
         btn_rejected.setOnClickListener(this);
 
+
         return rootView;
     }
 
@@ -152,7 +152,9 @@ public class MapFragment extends Fragment implements View.OnClickListener, Locat
         googleMap = fm.getMap();
 //        googleMap.getUiSettings().setZoomControlsEnabled(true);
 
+
     }
+
 
 
 
@@ -173,7 +175,14 @@ locationUtils.googleApiConnect();
         if (locationUtils.isGoogleApiConnect()){
             locationUtils.startLocationUpdates();
             Log.d(TAG, "Location update resumed .....................");
+        System.out.print(msg);
         }
+
+        if (!Utility.getFromSharedPrefs(getActivity(),Constants.REQUEST_ID).equalsIgnoreCase
+                (Constants.NO_REQUEST_ID))
+        viewVisibility(Utility.getFromSharedPrefs(getActivity(),Constants.CURRENT_STATE));
+
+
     }
 
 
@@ -193,7 +202,7 @@ locationUtils.googleApiConnect();
     public void onStop() {
         super.onStop();
         Log.d(TAG, "onStop fired ..............");
-//        mGoogleApiClient.disconnect();
+        mGoogleApiClient.disconnect();
 //        Log.d(TAG, "isConnected ...............: " + mGoogleApiClient.isConnected());
     }
    /* @Override
@@ -471,5 +480,37 @@ locationUtils.googleApiConnect();
   }
 
 
+    }
+
+
+    private void viewVisibility(String responseAction){
+
+        switch (responseAction){
+
+            case Constants.REJECTED_STATE:
+                break;
+
+            case Constants.ACCEPTED_STATE:
+                btn_accept.setVisibility(View.VISIBLE);
+                btn_rejected.setVisibility(View.VISIBLE);
+
+                break;
+
+            case Constants.DRIVER_ARRIVED_STATE:
+                break;
+
+            case Constants.TRIP_STARTRED_STATE:
+                break;
+
+            case Constants.TRIP_COMPLETED_STATE:
+                break;
+
+            case Constants.PROVIDER_RATING_STATE:
+                break;
+
+
+
+
+        }
     }
 }

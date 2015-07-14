@@ -28,7 +28,12 @@ import android.util.Log;
 
 import com.gojavas.tempola.R;
 import com.gojavas.tempola.activity.MainActivity;
+import com.gojavas.tempola.constants.Constants;
+import com.gojavas.tempola.utils.Utility;
 import com.google.android.gms.gcm.GcmListenerService;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class MyGcmListenerService extends GcmListenerService {
 
@@ -49,6 +54,26 @@ public class MyGcmListenerService extends GcmListenerService {
         Log.d(TAG, "From: " + from);
         Log.d(TAG, "Message: " + message);
         Log.d(TAG, "Ticker: " + ticker);
+
+
+        try {
+            JSONObject jsonObject=new JSONObject(ticker);
+            String id=jsonObject.getString("request_id");
+            String time=jsonObject.getString("request_time_start");
+
+            Utility.saveToSharedPrefs(this,Constants.REQUEST_ID,id);
+            Utility.saveToSharedPrefs(this,Constants.REQUEST_ID_TIME,time);
+            Utility.saveToSharedPrefs(this,Constants.CURRENT_STATE,Constants.ACCEPTED_STATE);
+
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
+
+
 
         /**
          * Production applications would usually process the message here.

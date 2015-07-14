@@ -16,13 +16,20 @@ public class Constants {
 
 
 
+    public static final String CURRENT_STATE="current_state";
 
+    public static final String REQUEST_ID="requestid";
+    public static final String REQUEST_ID_TIME="requesttime";
+
+
+    public static final String NO_REQUEST_ID="";
     public static final String REJECTED_STATE="0";
     public static final String ACCEPTED_STATE="1";
     public static final String DRIVER_ARRIVED_STATE="3";
     public static final String TRIP_STARTRED_STATE="4";
     public static final String TRIP_COMPLETED_STATE="5";
     public static final String PROVIDER_RATING_STATE="6";
+
 
 
     public static final String GET_VEHICAL_TYPES = "http://tempola.in/api/public/application/types";
