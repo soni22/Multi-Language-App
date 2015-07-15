@@ -35,6 +35,7 @@ import com.gojavas.tempola.R;
 import com.gojavas.tempola.application.TempolaApplication;
 import com.gojavas.tempola.constants.Constants;
 import com.gojavas.tempola.fragment.MapFragment;
+import com.gojavas.tempola.fragment.MapFragmentNew;
 import com.gojavas.tempola.utils.Utility;
 
 import java.util.HashMap;
@@ -163,6 +164,7 @@ public class MainActivity extends ActionBarActivity implements CompoundButton.On
                 break;
         }
     }
+
 
     private boolean UserState(){
 

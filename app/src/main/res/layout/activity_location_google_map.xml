@@ -27,6 +27,7 @@
                 android:background="@color/colorAccent"
                 android:layout_weight="1"
                 android:text="Rejected"
+                android:visibility="gone"
                 android:textColor="@color/white"/>
 
             <Button
@@ -34,9 +35,11 @@
                 android:layout_weight="1"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                android:text="Accepted"
+                android:visibility="gone"
                 android:background="@color/colorPrimary"
-                android:text="Acceptd"
                 android:textColor="@color/white"/>
+
         </LinearLayout>
 
     <RelativeLayout
