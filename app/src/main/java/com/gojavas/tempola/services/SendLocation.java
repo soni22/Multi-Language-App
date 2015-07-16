@@ -11,16 +11,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.StringRequest;
-import com.gojavas.tempola.activity.MainActivity;
 import com.gojavas.tempola.application.TempolaApplication;
 import com.gojavas.tempola.constants.Constants;
-import com.gojavas.tempola.database.UserHelper;
-import com.gojavas.tempola.entity.UserEntity;
 import com.gojavas.tempola.utils.LocationUtils;
 import com.gojavas.tempola.utils.Utility;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
