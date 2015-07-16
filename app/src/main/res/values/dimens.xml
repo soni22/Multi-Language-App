@@ -12,4 +12,5 @@
     <dimen name="eight">8dp</dimen>
     <dimen name="sixteen">16dp</dimen>
     <dimen name="fortyeight">48dp</dimen>
+    <dimen name="fiftysix">56dp</dimen>
 </resources>

@@ -99,4 +99,40 @@
 
     </RelativeLayout>
 
+    <RelativeLayout
+        android:id="@+id/user_detail_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#AA000000"
+        android:padding="@dimen/sixteen">
+
+        <com.gojavas.tempola.utils.RoundedImageView
+            android:id="@+id/user_image"
+            android:layout_width="@dimen/fiftysix"
+            android:layout_height="@dimen/fiftysix"
+            android:layout_marginRight="@dimen/sixteen"
+            android:src="@drawable/profile"
+            android:scaleType="centerCrop"/>
+
+        <TextView
+            android:id="@+id/user_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/user_image"
+            android:singleLine="true"
+            android:text="Name"
+            android:textColor="@color/white"
+            android:textSize="20sp"/>
+
+        <TextView
+            android:id="@+id/user_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/user_image"
+            android:layout_below="@+id/user_name"
+            android:text="Address"
+            android:textColor="@color/white"/>
+
+    </RelativeLayout>
+
 </RelativeLayout>
