@@ -249,7 +249,11 @@ public class SignIn extends AppCompatActivity implements View.OnClickListener{
                                 Intent intent=new Intent(SignIn.this, SendLocation.class);
                                 startService(intent);
 
-                                CheckState();
+
+                                Intent intentSubmit=new Intent(SignIn.this,MainActivity.class);
+                                startActivity(intentSubmit);
+
+//                                CheckState();
 
 
 
@@ -352,9 +356,6 @@ public class SignIn extends AppCompatActivity implements View.OnClickListener{
                     public void onResponse(String response) {
 
                         Log.i("response check state = ", response);
-
-                        Intent intentSubmit=new Intent(SignIn.this,MainActivity.class);
-                        startActivity(intentSubmit);
 
 
                     }

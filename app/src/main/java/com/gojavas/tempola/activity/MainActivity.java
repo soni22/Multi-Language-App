@@ -24,6 +24,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.Switch;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -121,6 +123,7 @@ public class MainActivity extends ActionBarActivity implements CompoundButton.On
             mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
                     mDrawerLayout.openDrawer(GravityCompat.START);
                 }
             });
@@ -136,6 +139,14 @@ public class MainActivity extends ActionBarActivity implements CompoundButton.On
                     public boolean onNavigationItemSelected(MenuItem menuItem) {
                         menuItem.setChecked(true);
                         mDrawerLayout.closeDrawers();
+
+                        switch(menuItem.getItemId()){
+
+                            case R.id.logout:
+                                Toast.makeText(MainActivity.this,"Logout",Toast.LENGTH_LONG).show();
+                                break;
+                        }
+
                         return true;
                     }
                 });
@@ -144,9 +155,12 @@ public class MainActivity extends ActionBarActivity implements CompoundButton.On
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+
             case android.R.id.home:
                 mDrawerLayout.openDrawer(GravityCompat.START);
                 return true;
+           
+
         }
         return super.onOptionsItemSelected(item);
     }
@@ -205,6 +219,4 @@ public class MainActivity extends ActionBarActivity implements CompoundButton.On
 
         return false;
     }
-
-
 }

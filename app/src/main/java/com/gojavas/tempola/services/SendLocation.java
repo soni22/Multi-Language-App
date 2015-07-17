@@ -57,9 +57,11 @@ public class SendLocation extends IntentService implements LocationUtils.OnLocat
         System.out.print("SendLocation = " + location);
 
         if (location!=null)
+
         {
+            sendUpdatedLocation(location.getLatitude(),location.getLongitude());
+
             if (Utility.getFromSharedPrefs(this,Constants.REQUESTID).equals(Constants.NO_REQUEST_ID)) {
-                sendUpdatedLocation(location.getLatitude(),location.getLongitude());
 
             } else {
 //                new UploadTripLocationData().execute();

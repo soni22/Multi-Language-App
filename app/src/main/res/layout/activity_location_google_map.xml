@@ -94,7 +94,7 @@
             android:layout_height="wrap_content"
             android:background="@color/colorPrimaryDark"
             android:layout_alignParentBottom="true"
-            android:text="Driver Arrived"
+            android:text="Driver Started"
             android:textColor="@color/white"/>
 
     </RelativeLayout>
