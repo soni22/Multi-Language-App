@@ -174,7 +174,6 @@ public class MainActivity extends ActionBarActivity implements CompoundButton.On
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Log.i("response toggle state = ", response);
                     }
                 }, new Response.ErrorListener() {
 

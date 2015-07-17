@@ -100,10 +100,10 @@
                 android:layout_marginTop="15dp"
                 android:layout_marginBottom="10dp"
                 android:layout_centerHorizontal="true"
-                android:background="@color/colorPrimary"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Sign In"/>
+                android:text="Sign In"
+                android:background="@drawable/button_effect"/>
 
             <TextView
                 android:id="@+id/signin_forgotpassword"
@@ -138,7 +138,7 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="20dp"
                 android:layout_centerHorizontal="true"
-                android:background="@color/colorPrimary"
+                android:background="@drawable/button_effect"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Register"/>
