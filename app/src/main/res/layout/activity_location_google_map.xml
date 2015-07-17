@@ -103,7 +103,8 @@
         android:id="@+id/user_detail_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#AA000000"
+        android:background="#50000000"
+        android:visibility="gone"
         android:padding="@dimen/sixteen">
 
         <com.gojavas.tempola.utils.RoundedImageView

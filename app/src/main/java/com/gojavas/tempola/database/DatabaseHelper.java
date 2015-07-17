@@ -16,6 +16,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "Tempola.db";
     public static final String  DRIVER_TABLE_NAME = "driver";
     public static final String DOG_REQUEST_TABLE_NAME = "dogrequests";
+    public static final String TRIP_TRACKING = "triptracking";
 
 
 
@@ -50,6 +51,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String LONGITUDE = "longitude";
     public static final String RATING = "rating";
     public static final String NUM_RATING = "num_rating";
+
+
+    //Tracking Table
 
 
 
@@ -98,6 +102,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         LONGITUDE + " REAL, " +
                         RATING + " TEXT, " +
                         NUM_RATING + " INTEGER" +
+                        ")"
+        );
+
+        sqLiteDatabase.execSQL( "create table " + TRIP_TRACKING + " (" +
+                        ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                        REQUEST_ID + " INTEGER, " +
+                        LATITUDE + " REAL, " +
+                        LONGITUDE + " REAL" +
                         ")"
         );
 

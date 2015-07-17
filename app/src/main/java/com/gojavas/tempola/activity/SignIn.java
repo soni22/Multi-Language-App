@@ -15,8 +15,10 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
+import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.StringRequest;
@@ -65,8 +67,8 @@ public class SignIn extends AppCompatActivity implements View.OnClickListener{
         et_email=(EditText)findViewById(R.id.signin_email);
         et_password=(EditText)findViewById(R.id.signin_password);
 
-        et_email.setText("varunjain@abc.com");
-        et_password.setText("anshul123");
+        et_email.setText("mohammad.asif@gojavas.com");
+        et_password.setText("123456");
 
         progressDialog=new ProgressDialog(SignIn.this);
 
@@ -299,6 +301,9 @@ public class SignIn extends AppCompatActivity implements View.OnClickListener{
             }
 
         };
+        int socketTimeout = 20000;//30 seconds - change to what you want
+        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        jsonObjRequest.setRetryPolicy(policy);
 
         TempolaApplication.getInstance().addToRequestQueue(jsonObjRequest);
 

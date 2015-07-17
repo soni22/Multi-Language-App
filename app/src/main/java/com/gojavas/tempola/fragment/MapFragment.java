@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -38,17 +39,20 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.maps.android.ui.IconGenerator;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -67,7 +71,8 @@ public class MapFragment extends Fragment implements View.OnClickListener, Locat
     private static final long INTERVAL = 1000 * 60 * 1; //1 minute
     private static final long FASTEST_INTERVAL = 1000 * 60 * 1; // 1 minute
     Button btnFusedLocation;
-    TextView tvLocation, btn_time, btn_distance;
+    TextView tvLocation, btn_time, btn_distance,tv_userName,tv_userAddress;
+    ImageView iv_userImage;
     LocationRequest mLocationRequest;
     GoogleApiClient mGoogleApiClient;
     Location mCurrentLocation;
@@ -75,11 +80,12 @@ public class MapFragment extends Fragment implements View.OnClickListener, Locat
     GoogleMap googleMap;
     LatLng lastlatLng=null;
     LinearLayout linearLayout_accept_reject;
-    RelativeLayout mMapBottomLayout;
+    RelativeLayout mMapBottomLayout,userDetailLayout;
     Button btn_accept,btn_rejected,btn_tripcompleted_driverwalkstarted;
     FloatingActionButton btn_call;
     ProgressDialog progressDialog;
     LocationUtils  locationUtils;
+    Marker driver_marker,client_marker;
 
     private final static int DELAY = 10000;
     private final Handler handler = new Handler();
@@ -142,6 +148,11 @@ public class MapFragment extends Fragment implements View.OnClickListener, Locat
 
         View rootView = inflater.inflate(R.layout.activity_location_google_map, container, false);
 
+        userDetailLayout=(RelativeLayout)rootView.findViewById(R.id.user_detail_layout);
+        tv_userName=(TextView)rootView.findViewById(R.id.user_name);
+        tv_userAddress=(TextView)rootView.findViewById(R.id.user_address);
+        iv_userImage=(ImageView)rootView.findViewById(R.id.user_image);
+
         linearLayout_accept_reject=(LinearLayout)rootView.findViewById(R.id.notification_layout);
         mMapBottomLayout=(RelativeLayout)rootView.findViewById(R.id.map_bottom_layout);
 
@@ -170,7 +181,7 @@ public class MapFragment extends Fragment implements View.OnClickListener, Locat
                 .findFragmentById(R.id.map);
         googleMap = fm.getMap();
 //        googleMap.getUiSettings().setZoomControlsEnabled(true);
-        viewVisibility(Utility.getFromSharedPrefs(getActivity(), Constants.CURRENT_STATE));
+//        viewVisibility(Utility.getFromSharedPrefs(getActivity(), Constants.CURRENT_STATE));
 
 
     }
@@ -200,8 +211,11 @@ locationUtils.googleApiConnect();
 
         if (!Utility.getFromSharedPrefs(getActivity(),Constants.REQUEST_ID).equalsIgnoreCase
                 (Constants.NO_REQUEST_ID)) {
-                        startquestReTimer();
+//                        startquestReTimer();
+            viewVisibility(Utility.getFromSharedPrefs(getActivity(),Constants.CURRENT_STATE));
         }
+
+
 
     }
 
@@ -248,23 +262,28 @@ locationUtils.googleApiConnect();
         // https://developers.google.com/maps/documentation/android/utility/
         // I have used this to display the time as title for location markers
         // you can safely comment the following four lines but for this info
-        IconGenerator iconFactory = new IconGenerator(getActivity());
-        iconFactory.setStyle(IconGenerator.STYLE_PURPLE);
-        options.icon(BitmapDescriptorFactory.fromBitmap(iconFactory.makeIcon(mLastUpdateTime)));
-        options.anchor(iconFactory.getAnchorU(), iconFactory.getAnchorV());
+
+
+//        IconGenerator iconFactory = new IconGenerator(getActivity());
+//        iconFactory.setStyle(IconGenerator.STYLE_PURPLE);
+//        options.icon(BitmapDescriptorFactory.fromBitmap(iconFactory.makeIcon(mLastUpdateTime)));
+//        options.anchor(iconFactory.getAnchorU(), iconFactory.getAnchorV());
+
+        BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.drawable.jennifer);
 
         LatLng currentLatLng = new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
 
+        options.icon(icon);
         if (lastlocation==true){
             lastlatLng=currentLatLng;
 
         }
         options.position(currentLatLng);
 //googleMap.clear();
-        Marker mapMarker = googleMap.addMarker(options);
+        driver_marker = googleMap.addMarker(options);
         long atTime = mCurrentLocation.getTime();
         mLastUpdateTime = DateFormat.getTimeInstance().format(new Date(atTime));
-        mapMarker.setTitle(mLastUpdateTime);
+        driver_marker.setTitle(mLastUpdateTime);
 
 //        googleMap	.addPolyline((new PolylineOptions())
 //                .add(lastlatLng, currentLatLng).width(5).color(Color.BLUE)
@@ -336,13 +355,6 @@ locationUtils.googleApiConnect();
     switch (v.getId()){
 
         case R.id.map_accepted:
-
-                linearLayout_accept_reject.setVisibility(View.GONE);
-                mMapBottomLayout.setVisibility(View.VISIBLE);
-
-
-            if (googleMap!=null)
-                googleMap.clear();
 
             Map<String, String> params = new HashMap<String, String>();
 
@@ -456,8 +468,23 @@ locationUtils.googleApiConnect();
         switch (responseAction){
 
             case Constants.REJECTED_STATE:
+
+                linearLayout_accept_reject.setVisibility(View.GONE);
+                userDetailLayout.setVisibility(View.GONE);
+                Utility.saveToSharedPrefs(getActivity(), Constants.CURRENT_STATE, Constants.NO_REQUEST_ID);
+
                 break;
             case Constants.ACCEPTED_STATE:
+
+                linearLayout_accept_reject.setVisibility(View.GONE);
+                userDetailLayout.setVisibility(View.GONE);
+                mMapBottomLayout.setVisibility(View.VISIBLE);
+
+                if (googleMap!=null)
+                    googleMap.clear();
+
+                Utility.saveToSharedPrefs(getActivity(),Constants.CURRENT_STATE,Constants.ACCEPTED_STATE);
+
                 break;
             case Constants.DRIVER_ARRIVED_STATE:
                 break;
@@ -506,6 +533,7 @@ locationUtils.googleApiConnect();
 
             case Constants.NO_REQUEST_ID:
 
+                userDetailLayout.setVisibility(View.GONE);
                 btn_accept.setVisibility(View.GONE);
                 btn_rejected.setVisibility(View.GONE);
 
@@ -514,8 +542,20 @@ locationUtils.googleApiConnect();
 
             case Constants.REQUEST_ARRIVED:
 
+                userDetailLayout.setVisibility(View.VISIBLE);
                 btn_accept.setVisibility(View.VISIBLE);
                 btn_rejected.setVisibility(View.VISIBLE);
+
+                DogRequestEntity dogRequestEntity=DogRequestHelper.getInstance().getDogRequest
+                        (Utility
+                    .getFromSharedPrefs
+                        (getActivity(),Constants.REQUEST_ID));
+                tv_userAddress.setText(dogRequestEntity.getCurr_address());
+                tv_userName.setText(dogRequestEntity.getName());
+
+                ImageLoader.getInstance().displayImage(dogRequestEntity.getPicture(),iv_userImage);
+
+
 
                 break;
 
@@ -523,6 +563,10 @@ locationUtils.googleApiConnect();
                 break;
 
             case Constants.ACCEPTED_STATE:
+
+                linearLayout_accept_reject.setVisibility(View.GONE);
+                userDetailLayout.setVisibility(View.GONE);
+                mMapBottomLayout.setVisibility(View.VISIBLE);
 
                 break;
 
@@ -620,6 +664,8 @@ locationUtils.googleApiConnect();
                                         .REQUEST_ARRIVED);
 
                                 stopRequestTimer();
+
+                                viewVisibility(Utility.getFromSharedPrefs(getActivity(), Constants.CURRENT_STATE));
 
                             }
                         } catch (JSONException e) {

@@ -52,7 +52,7 @@ public class MyGcmListenerService extends GcmListenerService {
 
     private static final String TAG = "MyGcmListenerService";
 
-    String requestid="";
+    public String requestid="";
     int time_left=0;
     /**
      * Called when message is received.
@@ -73,14 +73,14 @@ public class MyGcmListenerService extends GcmListenerService {
 
         try {
             JSONObject jsonObject=new JSONObject(ticker);
-            final String requestid=jsonObject.getString("request_id");
+            final String requestid1=jsonObject.getString("request_id");
             final String time=jsonObject.getString("request_time_start");
 
 
 
-            String url=Constants.CHECK_REQUEST_STATUS+Constants.USERID+"="+Utility
+            String url=Constants.GET_ALL_REQUESTS+Constants.USERID+"="+Utility
                     .getFromSharedPrefs(this,Constants.USERID)+"&"+Constants.TOKEN+"="+Utility.getFromSharedPrefs
-                    (this, Constants.TOKEN)+"&"+Constants.REQUEST_ID+"="+requestid;
+                    (this, Constants.TOKEN);
 
             StringRequest jsonObjRequest = new StringRequest(Request.Method.GET,url,
                     new Response.Listener<String>() {
@@ -113,7 +113,8 @@ public class MyGcmListenerService extends GcmListenerService {
 
                                     JSONArray jsonArray=jsonObject1.getJSONArray("incoming_requests");
                                     JSONObject jsonObject2=jsonArray.getJSONObject(0);
-                                   String requestid=jsonObject2.getInt("request_id")+"";
+                                    String requestid=jsonObject2.getInt("request_id")+"";
+                                   // requestid=requestid;
                                     time_left=jsonObject2.getInt("time_left_to_respond");
 
                                     JSONObject jsonObject4=jsonObject2.getJSONObject
@@ -145,7 +146,7 @@ public class MyGcmListenerService extends GcmListenerService {
 
                                     DogRequestHelper.getInstance().insertOrUpdate(dogRequestEntity);
 
-                                    sendNotification(ticker);
+                                    sendNotification(ticker,time_left,requestid);
 
 
                                 }
@@ -216,7 +217,7 @@ public class MyGcmListenerService extends GcmListenerService {
      */
 
 
-    private void sendNotification(String message) {
+    private void sendNotification(String message,int time_left,String requestid) {
 
         Utility.saveToSharedPrefs(this, Constants.REQUEST_ID, requestid);
         Utility.saveToSharedPrefs(this, Constants.REQUEST_ID_TIME,time_left+"");

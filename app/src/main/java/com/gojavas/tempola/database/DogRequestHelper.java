@@ -32,8 +32,8 @@ public class DogRequestHelper {
     public void insertOrUpdate(DogRequestEntity dogRequestEntity) {
 
         SQLiteDatabase db = DatabaseHelper.getInstance().getReadableDatabase();
-        Cursor cursor =  db.rawQuery( "select * from  " + DatabaseHelper.DOG_REQUEST_TABLE_NAME + " " +
-                "where " + DatabaseHelper.REQUEST_ID + " = ? ", new String[] {dogRequestEntity.getRequestid()});
+        Cursor cursor =  db.rawQuery("select * from  " + DatabaseHelper.DOG_REQUEST_TABLE_NAME + " " +
+                "where " + DatabaseHelper.REQUEST_ID + " = ? ", new String[]{dogRequestEntity.getRequestid()});
 
         if(cursor.getCount() > 0) {
             // Update delivery
@@ -44,6 +44,25 @@ public class DogRequestHelper {
         }
     }
 
+    public DogRequestEntity getDogRequest(String requestid) {
+
+        DogRequestEntity dogRequestEntity=new DogRequestEntity();
+        SQLiteDatabase db = DatabaseHelper.getInstance().getReadableDatabase();
+        Cursor cursor =  db.rawQuery("select * from  " + DatabaseHelper.DOG_REQUEST_TABLE_NAME + " " +
+                "where " + DatabaseHelper.REQUEST_ID + " = ? ", new String[]{requestid});
+
+        if(cursor.getCount() > 0) {
+            cursor.moveToFirst();
+            while(cursor.isAfterLast() == false) {
+                dogRequestEntity = getContentValues(cursor);
+                cursor.moveToNext();
+                break;
+            }
+        }
+        cursor.close();
+        return dogRequestEntity;
+
+    }
 
     /**
      * Insert new user
@@ -90,20 +109,42 @@ public class DogRequestHelper {
         return contentValues;
     }
 
+    private DogRequestEntity getContentValues(Cursor cursor) {
+
+        DogRequestEntity dogRequestEntity=new DogRequestEntity();
+        dogRequestEntity.setTime_left_to_respond(cursor.getInt(cursor.getColumnIndex
+                (DatabaseHelper.TIME_LEFT)));
+        dogRequestEntity.setName(cursor.getString(cursor.getColumnIndex(DatabaseHelper.NAME)));
+
+        dogRequestEntity.setCurr_address(cursor.getString(cursor.getColumnIndex(DatabaseHelper.CURR_ADDRESS)));
+        dogRequestEntity.setPicture(cursor.getString(cursor.getColumnIndex(DatabaseHelper.PICTURE)));
+        dogRequestEntity.setPhone(cursor.getString(cursor.getColumnIndex(DatabaseHelper.PHONE)));
+        dogRequestEntity.setAddress(cursor.getString(cursor.getColumnIndex(DatabaseHelper.ADDRESS)));
+        dogRequestEntity.setLatitude(cursor.getDouble(cursor.getColumnIndex(DatabaseHelper
+                .LATITUDE)));
+        dogRequestEntity.setLongitude(cursor.getDouble(cursor.getColumnIndex(DatabaseHelper
+                .LONGITUDE)));
+        dogRequestEntity.setRating(cursor.getString(cursor.getColumnIndex(DatabaseHelper.RATING)));
+        dogRequestEntity.setNum_rating(cursor.getInt(cursor.getColumnIndex(DatabaseHelper
+                .NUM_RATING)));
+
+
+        return dogRequestEntity;
+    }
 
     //Dog Request Helper
-
-    public static final String REQUEST_ID = "requestid";
-    public static final String TIME_LEFT = "time_left_to_respond";
-    public static final String NAME = "name";
-    public static final String CURR_ADDRESS = "curr_address";
-    //    public static final String PICTURE = "picture";
-//    public static final String PHONE = "phone";
-//    public static final String ADDRESS = "address";
-    public static final String LATITUDE = "latitude";
-    public static final String LONGITUDE = "longitude";
-    public static final String RATING = "rating";
-    public static final String NUM_RATING = "num_rating";
+//
+//    public static final String REQUEST_ID = "requestid";
+//    public static final String TIME_LEFT = "time_left_to_respond";
+//    public static final String NAME = "name";
+//    public static final String CURR_ADDRESS = "curr_address";
+//    //    public static final String PICTURE = "picture";
+////    public static final String PHONE = "phone";
+////    public static final String ADDRESS = "address";
+//    public static final String LATITUDE = "latitude";
+//    public static final String LONGITUDE = "longitude";
+//    public static final String RATING = "rating";
+//    public static final String NUM_RATING = "num_rating";
 
 
 
