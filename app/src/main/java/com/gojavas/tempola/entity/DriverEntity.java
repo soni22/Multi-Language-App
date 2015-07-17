@@ -3,7 +3,7 @@ package com.gojavas.tempola.entity;
 /**
  * Created by gjs331 on 7/9/2015.
  */
-public class UserEntity {
+public class DriverEntity {
 
     private String userid;
     private String fname;

@@ -92,6 +92,7 @@ protected void googleApiClient(Context context){
     }
     public void stopLocationUpdates() {
 
+        if (mGoogleApiClient!=null && mGoogleApiClient.isConnected())
         LocationServices.FusedLocationApi.removeLocationUpdates(
                 mGoogleApiClient, this);
         Log.d("Location Stopped", "Location update stopped .......................");

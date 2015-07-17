@@ -1,20 +1,19 @@
 package com.gojavas.tempola.fragment;
 
 import android.app.ProgressDialog;
-import android.content.Intent;
-import android.graphics.Color;
 import android.location.Location;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.GridLayout;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
@@ -24,11 +23,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.StringRequest;
 import com.gojavas.tempola.R;
-import com.gojavas.tempola.activity.MainActivity;
 import com.gojavas.tempola.application.TempolaApplication;
 import com.gojavas.tempola.constants.Constants;
-import com.gojavas.tempola.database.UserHelper;
-import com.gojavas.tempola.entity.UserEntity;
 import com.gojavas.tempola.utils.Utility;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -45,11 +41,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.maps.android.ui.IconGenerator;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.text.DateFormat;
 import java.util.Date;
@@ -69,7 +61,7 @@ public class MapFragmentNew extends Fragment implements LocationListener,GoogleA
     private static final long INTERVAL = 1000 * 60 * 1; //1 minute
     private static final long FASTEST_INTERVAL = 1000 * 60 * 1; // 1 minute
     Button btnFusedLocation;
-    TextView tvLocation;
+    TextView tvLocation,btn_time,btn_distance;
     LocationRequest mLocationRequest;
     GoogleApiClient mGoogleApiClient;
     Location mCurrentLocation;
@@ -77,8 +69,9 @@ public class MapFragmentNew extends Fragment implements LocationListener,GoogleA
     GoogleMap googleMap;
     LatLng lastlatLng=null;
     LinearLayout linearLayout_accept_reject;
-    GridLayout gridLayout_trip;
-    Button btn_accept,btn_rejected,btn_tripcompleted_driverwalkstarted,btn_call,btn_time,btn_distance;
+    RelativeLayout mMapBottomLayout;
+    Button btn_accept,btn_rejected,btn_tripcompleted_driverwalkstarted;
+    FloatingActionButton btn_call;
     ProgressDialog progressDialog;
 
 
@@ -121,15 +114,15 @@ public class MapFragmentNew extends Fragment implements LocationListener,GoogleA
         View rootView = inflater.inflate(R.layout.activity_location_google_map, container, false);
 
         linearLayout_accept_reject=(LinearLayout)rootView.findViewById(R.id.notification_layout);
-        gridLayout_trip=(GridLayout)rootView.findViewById(R.id.gridlayout_trip);
+        mMapBottomLayout=(RelativeLayout)rootView.findViewById(R.id.map_bottom_layout);
 
         btn_accept=(Button)rootView.findViewById(R.id.map_accepted);
         btn_rejected=(Button)rootView.findViewById(R.id.map_rejected);
 
         btn_tripcompleted_driverwalkstarted=(Button)rootView.findViewById(R.id.map_trip_completed_driverwalkstarted);
-        btn_call=(Button)rootView.findViewById(R.id.map_call);
-        btn_distance=(Button)rootView.findViewById(R.id.map_distace);
-        btn_time=(Button)rootView.findViewById(R.id.map_time);
+        btn_call=(FloatingActionButton)rootView.findViewById(R.id.map_call);
+        btn_distance=(TextView)rootView.findViewById(R.id.map_distance);
+        btn_time=(TextView)rootView.findViewById(R.id.map_time);
 
 
         btn_accept.setOnClickListener(this);
@@ -291,7 +284,7 @@ public class MapFragmentNew extends Fragment implements LocationListener,GoogleA
             case R.id.map_accepted:
 
                 linearLayout_accept_reject.setVisibility(View.GONE);
-                gridLayout_trip.setVisibility(View.VISIBLE);
+                mMapBottomLayout.setVisibility(View.VISIBLE);
 
 
                 if (googleMap!=null)
@@ -338,7 +331,7 @@ public class MapFragmentNew extends Fragment implements LocationListener,GoogleA
                 break;
 
 
-            case R.id.map_distace:
+            case R.id.map_distance:
                 break;
         }
 

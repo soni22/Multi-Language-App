@@ -5,9 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -15,19 +13,20 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
+import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.StringRequest;
 import com.gojavas.tempola.R;
 import com.gojavas.tempola.application.TempolaApplication;
 import com.gojavas.tempola.constants.Constants;
-import com.gojavas.tempola.database.UserHelper;
-import com.gojavas.tempola.entity.UserEntity;
+import com.gojavas.tempola.database.DriverHelper;
+import com.gojavas.tempola.entity.DriverEntity;
 import com.gojavas.tempola.gcm.QuickstartPreferences;
 import com.gojavas.tempola.gcm.RegistrationIntentService;
 import com.gojavas.tempola.services.SendLocation;
@@ -68,7 +67,7 @@ public class SignIn extends AppCompatActivity implements View.OnClickListener{
         et_email=(EditText)findViewById(R.id.signin_email);
         et_password=(EditText)findViewById(R.id.signin_password);
 
-        et_email.setText("anshul.goel@gojavas.com");
+        et_email.setText("mohammad.asif@gojavas.com");
         et_password.setText("123456");
 
         progressDialog=new ProgressDialog(SignIn.this);
@@ -211,7 +210,7 @@ public class SignIn extends AppCompatActivity implements View.OnClickListener{
                         // "device_type":"android","token":"2y10Fh1l3YTiS9qB6Ku7c9yZxlWoEoDe6dbzdTrn1Ti3HsR5bICuddwG",
                         // "type":0}
 
-                                UserEntity userEntity=new UserEntity();
+                                DriverEntity driverEntity =new DriverEntity();
 //
                                 String id=jsonObject.getString("id");
 //                                String first_name=jsonObject.getString("first_name");
@@ -228,24 +227,24 @@ public class SignIn extends AppCompatActivity implements View.OnClickListener{
 //                                String type=jsonObject.getString("type");
 
 
-                                userEntity.setUserid(id);
-                                userEntity.setFname(jsonObject.getString("first_name"));
-                                userEntity.setLname(jsonObject.getString("last_name"));
-                                userEntity.setPhoneno(jsonObject.getString("phone"));
-                                userEntity.setEmail(jsonObject.getString("email"));
-                                userEntity.setPicture(jsonObject.getString("picture"));
-                                userEntity.setBio(jsonObject.getString("bio"));
-                                userEntity.setAddress(jsonObject.getString("address"));
-                                userEntity.setState(jsonObject.getString("state"));
-                                userEntity.setCountry(jsonObject.getString("country"));
-                                userEntity.setZipcode(jsonObject.getString("zipcode"));
-                                userEntity.setToken(jsonObject.getString("token"));
-                                userEntity.setType(jsonObject.getString("type"));
+                                driverEntity.setUserid(id);
+                                driverEntity.setFname(jsonObject.getString("first_name"));
+                                driverEntity.setLname(jsonObject.getString("last_name"));
+                                driverEntity.setPhoneno(jsonObject.getString("phone"));
+                                driverEntity.setEmail(jsonObject.getString("email"));
+                                driverEntity.setPicture(jsonObject.getString("picture"));
+                                driverEntity.setBio(jsonObject.getString("bio"));
+                                driverEntity.setAddress(jsonObject.getString("address"));
+                                driverEntity.setState(jsonObject.getString("state"));
+                                driverEntity.setCountry(jsonObject.getString("country"));
+                                driverEntity.setZipcode(jsonObject.getString("zipcode"));
+                                driverEntity.setToken(jsonObject.getString("token"));
+                                driverEntity.setType(jsonObject.getString("type"));
 
                                 Utility.saveToSharedPrefs(SignIn.this, Constants.TOKEN, token);
                                 Utility.saveToSharedPrefs(SignIn.this, Constants.USERID, id);
 
-                                UserHelper.getInstance().insertOrUpdate(userEntity);
+                                DriverHelper.getInstance().insertOrUpdate(driverEntity);
 
                                 Intent intent=new Intent(SignIn.this, SendLocation.class);
                                 startService(intent);
@@ -300,6 +299,9 @@ public class SignIn extends AppCompatActivity implements View.OnClickListener{
             }
 
         };
+        int socketTimeout = 20000;//30 seconds - change to what you want
+        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        jsonObjRequest.setRetryPolicy(policy);
 
         TempolaApplication.getInstance().addToRequestQueue(jsonObjRequest);
 

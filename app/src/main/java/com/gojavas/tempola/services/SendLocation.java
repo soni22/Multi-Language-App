@@ -11,16 +11,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.StringRequest;
-import com.gojavas.tempola.activity.MainActivity;
 import com.gojavas.tempola.application.TempolaApplication;
 import com.gojavas.tempola.constants.Constants;
-import com.gojavas.tempola.database.UserHelper;
-import com.gojavas.tempola.entity.UserEntity;
 import com.gojavas.tempola.utils.LocationUtils;
 import com.gojavas.tempola.utils.Utility;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -60,10 +54,18 @@ public class SendLocation extends IntentService implements LocationUtils.OnLocat
     @Override
     public void onLocationReceived(Location location) {
 
-        System.out.print("SendLocation = "+ location);
+        System.out.print("SendLocation = " + location);
 
         if (location!=null)
-        sendUpdatedLocation(location.getLatitude(),location.getLongitude());
+        {
+            if (Utility.getFromSharedPrefs(this,Constants.REQUESTID).equals(Constants.NO_REQUEST_ID)) {
+                sendUpdatedLocation(location.getLatitude(),location.getLongitude());
+
+            } else {
+//                new UploadTripLocationData().execute();
+            }
+        }
+
 
     }
 
