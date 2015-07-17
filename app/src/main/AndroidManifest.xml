@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.gojavas.tempola" >
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    package="com.gojavas.tempola">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
@@ -53,7 +54,8 @@
             android:screenOrientation="portrait"/>
 
         <activity android:name=".activity.MainActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"/>
 
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"

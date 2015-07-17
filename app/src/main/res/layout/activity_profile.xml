@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout  xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/tools"
     android:id="@+id/main_content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -18,11 +19,7 @@
             android:id="@+id/profile_collapsing_toolbar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_scrollFlags="scroll|enterAlwaysCollapsed"
-            android:fitsSystemWindows="true"
-            app:contentScrim="?attr/colorPrimary"
-            app:expandedTitleMarginStart="48dp"
-            app:expandedTitleMarginEnd="64dp">
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <ImageView
                 android:id="@+id/profile_imageview"
@@ -33,325 +30,355 @@
                 android:fitsSystemWindows="true"
                 app:layout_collapseMode="parallax"/>
 
+
             <android.support.v7.widget.Toolbar
                 android:id="@+id/profile_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-                app:layout_collapseMode="pin" />
+                app:layout_collapseMode="pin"/>
 
         </android.support.design.widget.CollapsingToolbarLayout>
 
     </android.support.design.widget.AppBarLayout>
+
+
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/profile_card_view"
+                android:layout_gravity="center"
+                card_view:cardCornerRadius="5dp"
+                android:layout_margin="10dp"
+                android:padding="10dp"
+                card_view:contentPadding="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:cardElevation="2dp">
+
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <ImageView
-                android:id="@+id/profile_user_icon"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:src="@drawable/ic_profile"
-                android:layout_marginLeft="@dimen/sixteen"
-                android:layout_marginRight="@dimen/sixteen"
-                android:layout_alignTop="@+id/profile_firstname_layout"
-                android:layout_alignBottom="@+id/profile_firstname_layout"/>
+                <ImageView
+                    android:id="@+id/profile_user_icon"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/ic_profile"
+                    android:layout_marginLeft="@dimen/sixteen"
+                    android:layout_marginRight="@dimen/sixteen"
+                    android:layout_alignTop="@+id/profile_firstname_layout"
+                    android:layout_alignBottom="@+id/profile_firstname_layout"/>
 
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/profile_firstname_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_marginTop="@dimen/eight"
-                android:layout_marginRight="@dimen/sixteen"
-                android:layout_toRightOf="@+id/profile_user_icon">
-
-                <EditText
-                    android:id="@+id/profile_firstname"
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/profile_firstname_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="First Name"
-                    android:paddingLeft="@dimen/sixteen"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginTop="@dimen/eight"
+                    android:layout_marginRight="@dimen/sixteen"
+                    android:layout_toRightOf="@+id/profile_user_icon">
+
+                    <EditText
+                        android:id="@+id/profile_firstname"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="First Name"
+                        android:paddingLeft="@dimen/sixteen"
+                        android:paddingRight="@dimen/sixteen"
+                        android:nextFocusRight="@+id/profile_lastname"
+                        android:singleLine="true"/>
+
+                </android.support.design.widget.TextInputLayout>
+
+                <ImageView
+                    android:id="@+id/profile_user_icon2"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/ic_profile"
+                    android:layout_marginLeft="@dimen/sixteen"
+                    android:layout_marginRight="@dimen/sixteen"
+                    android:layout_alignTop="@+id/profile_lastname_layout"
+                    android:layout_alignBottom="@+id/profile_lastname_layout"/>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/profile_lastname_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/profile_firstname_layout"
+                    android:layout_marginTop="@dimen/eight"
+                    android:layout_marginRight="@dimen/sixteen"
+                    android:layout_toRightOf="@+id/profile_user_icon2">
+
+                    <EditText
+                        android:id="@+id/profile_lastname"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Last Name"
+                        android:paddingLeft="@dimen/sixteen"
+                        android:paddingRight="@dimen/sixteen"
+                        android:nextFocusRight="@+id/profile_email"
+                        android:singleLine="true"/>
+
+                </android.support.design.widget.TextInputLayout>
+
+                <ImageView
+                    android:id="@+id/profile_user_icon3"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/ic_profile"
+                    android:layout_marginLeft="@dimen/sixteen"
+                    android:layout_marginRight="@dimen/sixteen"
+                    android:layout_alignTop="@+id/profile_password_layout"
+                    android:layout_alignBottom="@+id/profile_password_layout"/>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/profile_password_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/profile_lastname_layout"
+                    android:layout_marginTop="@dimen/eight"
+                    android:layout_marginRight="@dimen/sixteen"
+                    android:layout_toRightOf="@+id/profile_user_icon3">
+
+                    <EditText
+                        android:id="@+id/profile_password"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Password"
+                        android:inputType="textPassword"
+                        android:paddingLeft="@dimen/sixteen"
+                        android:paddingRight="@dimen/sixteen"
+                        android:nextFocusRight="@+id/profile_phoneno"
+                        android:singleLine="true"/>
+
+                </android.support.design.widget.TextInputLayout>
+
+                <ImageView
+                    android:id="@+id/profile_email_icon"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/ic_email"
+                    android:layout_marginLeft="@dimen/sixteen"
+                    android:layout_marginRight="@dimen/sixteen"
+                    android:layout_alignTop="@+id/profile_email_layout"
+                    android:layout_alignBottom="@+id/profile_email_layout"/>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/profile_email_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/profile_password_layout"
+                    android:layout_marginTop="@dimen/eight"
+                    android:layout_marginRight="@dimen/sixteen"
+                    android:layout_toRightOf="@+id/profile_email_icon">
+
+                    <EditText
+                        android:id="@+id/profile_email"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Email Id"
+                        android:inputType="textEmailAddress"
+                        android:paddingLeft="@dimen/sixteen"
+                        android:paddingRight="@dimen/sixteen"
+                        android:nextFocusRight="@+id/profile_password"
+                        android:singleLine="true"/>
+
+                </android.support.design.widget.TextInputLayout>
+
+                <ImageView
+                    android:id="@+id/profile_phone_icon"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/ic_phone"
+                    android:layout_marginLeft="@dimen/sixteen"
+                    android:layout_marginRight="@dimen/sixteen"
+                    android:layout_alignTop="@+id/profile_countrycode"
+                    android:layout_alignBottom="@+id/profile_countrycode"/>
+
+                <Spinner
+                    android:id="@+id/profile_countrycode"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/fortyeight"
+                    android:layout_below="@+id/profile_email_layout"
+                    android:layout_toRightOf="@+id/profile_phone_icon"
                     android:paddingRight="@dimen/sixteen"
-                    android:nextFocusRight="@+id/profile_lastname"
-                    android:singleLine="true"/>
+                    android:layout_marginTop="@dimen/eight"
+                    android:layout_marginRight="@dimen/sixteen"/>
 
-            </android.support.design.widget.TextInputLayout>
+                <ImageView
+                    android:id="@+id/profile_phone_icon2"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/ic_phone"
+                    android:layout_marginLeft="@dimen/sixteen"
+                    android:layout_marginRight="@dimen/sixteen"
+                    android:layout_alignTop="@+id/profile_phoneno_layout"
+                    android:layout_alignBottom="@+id/profile_phoneno_layout"/>
 
-            <ImageView
-                android:id="@+id/profile_user_icon2"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:src="@drawable/ic_profile"
-                android:layout_marginLeft="@dimen/sixteen"
-                android:layout_marginRight="@dimen/sixteen"
-                android:layout_alignTop="@+id/profile_lastname_layout"
-                android:layout_alignBottom="@+id/profile_lastname_layout"/>
-
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/profile_lastname_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/profile_firstname_layout"
-                android:layout_marginTop="@dimen/eight"
-                android:layout_marginRight="@dimen/sixteen"
-                android:layout_toRightOf="@+id/profile_user_icon2">
-
-                <EditText
-                    android:id="@+id/profile_lastname"
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/profile_phoneno_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Last Name"
-                    android:paddingLeft="@dimen/sixteen"
+                    android:layout_below="@+id/profile_countrycode"
+                    android:layout_toRightOf="@+id/profile_phone_icon"
+                    android:layout_marginTop="@dimen/eight"
+                    android:layout_marginRight="@dimen/sixteen">
+
+                    <EditText
+                        android:id="@+id/profile_phoneno"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Phone Number"
+                        android:inputType="number"
+                        android:paddingLeft="@dimen/sixteen"
+                        android:paddingRight="@dimen/sixteen"
+                        android:nextFocusRight="@+id/profile_address"
+                        android:singleLine="true"/>
+
+                </android.support.design.widget.TextInputLayout>
+
+                <ImageView
+                    android:id="@+id/profile_address_icon"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/ic_location"
+                    android:layout_marginLeft="@dimen/sixteen"
+                    android:layout_marginRight="@dimen/sixteen"
+                    android:layout_alignTop="@+id/profile_address_layout"
+                    android:layout_alignBottom="@+id/profile_address_layout"/>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/profile_address_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/profile_phoneno_layout"
+                    android:layout_toRightOf="@+id/profile_address_icon"
+                    android:layout_marginTop="@dimen/eight"
+                    android:layout_marginRight="@dimen/sixteen">
+
+                    <EditText
+                        android:id="@+id/profile_address"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Address"
+                        android:paddingLeft="@dimen/sixteen"
+                        android:paddingRight="@dimen/sixteen"
+                        android:nextFocusRight="@+id/profile_bio"
+                        android:singleLine="true"/>
+
+                </android.support.design.widget.TextInputLayout>
+
+                <ImageView
+                    android:id="@+id/profile_address_icon2"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/ic_location"
+                    android:layout_marginLeft="@dimen/sixteen"
+                    android:layout_marginRight="@dimen/sixteen"
+                    android:layout_alignTop="@+id/profile_zipcode_layout"
+                    android:layout_alignBottom="@+id/profile_zipcode_layout"/>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/profile_zipcode_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/profile_address_layout"
+                    android:layout_toRightOf="@+id/profile_address_icon"
+                    android:layout_marginTop="@dimen/eight"
+                    android:layout_marginRight="@dimen/sixteen">
+
+                    <EditText
+                        android:id="@+id/profile_zipcode"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Zipcode"
+                        android:paddingLeft="@dimen/sixteen"
+                        android:paddingRight="@dimen/sixteen"
+                        android:inputType="number"/>
+
+                </android.support.design.widget.TextInputLayout>
+
+                <ImageView
+                    android:id="@+id/profile_bio_icon"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/ic_info"
+                    android:layout_marginLeft="@dimen/sixteen"
+                    android:layout_marginRight="@dimen/sixteen"
+                    android:layout_alignTop="@+id/profile_bio_layout"
+                    android:layout_alignBottom="@+id/profile_bio_layout"/>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/profile_bio_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/profile_zipcode_layout"
+                    android:layout_toRightOf="@+id/profile_address_icon"
+                    android:layout_marginTop="@dimen/eight"
+                    android:layout_marginRight="@dimen/sixteen">
+
+                    <EditText
+                        android:id="@+id/profile_bio"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Bio"
+                        android:paddingLeft="@dimen/sixteen"
+                        android:paddingRight="@dimen/sixteen"
+                        android:nextFocusRight="@+id/profile_zipcode"
+                        android:singleLine="true"/>
+
+                </android.support.design.widget.TextInputLayout>
+
+                <ImageView
+                    android:id="@+id/vehicle_icon"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/ic_info"
+                    android:layout_marginLeft="@dimen/sixteen"
+                    android:layout_marginRight="@dimen/sixteen"
+                    android:layout_alignTop="@+id/spinner_vehicletype"
+                    android:layout_alignBottom="@+id/spinner_vehicletype"/>
+
+                <Spinner
+                    android:id="@+id/spinner_vehicletype"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/fortyeight"
+                    android:layout_below="@+id/profile_bio_layout"
+                    android:layout_toRightOf="@+id/vehicle_icon"
                     android:paddingRight="@dimen/sixteen"
-                    android:nextFocusRight="@+id/profile_email"
-                    android:singleLine="true"/>
+                    android:paddingLeft="10dp"
+                    android:layout_marginTop="@dimen/eight"
+                    android:layout_marginRight="@dimen/sixteen"/>
 
-            </android.support.design.widget.TextInputLayout>
+                <Button
+                    android:layout_below="@+id/spinner_vehicletype"
+                    android:id="@+id/submitregistration"
+                    android:gravity="center"
+                    android:layout_centerInParent="true"
+                    android:text="Submit"
+                    android:textColor="#fff"
+                    android:background="@color/colorPrimary"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="15dp"
+                    android:layout_width="150dp"
+                    android:layout_height="50dp"/>
 
-            <ImageView
-                android:id="@+id/profile_user_icon3"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:src="@drawable/ic_profile"
-                android:layout_marginLeft="@dimen/sixteen"
-                android:layout_marginRight="@dimen/sixteen"
-                android:layout_alignTop="@+id/profile_password_layout"
-                android:layout_alignBottom="@+id/profile_password_layout"/>
 
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/profile_password_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/profile_lastname_layout"
-                android:layout_marginTop="@dimen/eight"
-                android:layout_marginRight="@dimen/sixteen"
-                android:layout_toRightOf="@+id/profile_user_icon3">
-
-                <EditText
-                    android:id="@+id/profile_password"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Password"
-                    android:inputType="textPassword"
-                    android:paddingLeft="@dimen/sixteen"
-                    android:paddingRight="@dimen/sixteen"
-                    android:nextFocusRight="@+id/profile_phoneno"
-                    android:singleLine="true"/>
-
-            </android.support.design.widget.TextInputLayout>
-
-            <ImageView
-                android:id="@+id/profile_email_icon"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:src="@drawable/ic_email"
-                android:layout_marginLeft="@dimen/sixteen"
-                android:layout_marginRight="@dimen/sixteen"
-                android:layout_alignTop="@+id/profile_email_layout"
-                android:layout_alignBottom="@+id/profile_email_layout"/>
-
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/profile_email_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/profile_password_layout"
-                android:layout_marginTop="@dimen/eight"
-                android:layout_marginRight="@dimen/sixteen"
-                android:layout_toRightOf="@+id/profile_email_icon">
-
-                <EditText
-                    android:id="@+id/profile_email"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Email Id"
-                    android:inputType="textEmailAddress"
-                    android:paddingLeft="@dimen/sixteen"
-                    android:paddingRight="@dimen/sixteen"
-                    android:nextFocusRight="@+id/profile_password"
-                    android:singleLine="true"/>
-
-            </android.support.design.widget.TextInputLayout>
-
-            <ImageView
-                android:id="@+id/profile_phone_icon"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:src="@drawable/ic_phone"
-                android:layout_marginLeft="@dimen/sixteen"
-                android:layout_marginRight="@dimen/sixteen"
-                android:layout_alignTop="@+id/profile_countrycode"
-                android:layout_alignBottom="@+id/profile_countrycode"/>
-
-            <Spinner
-                android:id="@+id/profile_countrycode"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/fortyeight"
-                android:layout_below="@+id/profile_email_layout"
-                android:layout_toRightOf="@+id/profile_phone_icon"
-                android:paddingRight="@dimen/sixteen"
-                android:layout_marginTop="@dimen/eight"
-                android:layout_marginRight="@dimen/sixteen"/>
-
-            <ImageView
-                android:id="@+id/profile_phone_icon2"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:src="@drawable/ic_phone"
-                android:layout_marginLeft="@dimen/sixteen"
-                android:layout_marginRight="@dimen/sixteen"
-                android:layout_alignTop="@+id/profile_phoneno_layout"
-                android:layout_alignBottom="@+id/profile_phoneno_layout"/>
-
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/profile_phoneno_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/profile_countrycode"
-                android:layout_toRightOf="@+id/profile_phone_icon"
-                android:layout_marginTop="@dimen/eight"
-                android:layout_marginRight="@dimen/sixteen">
-
-                <EditText
-                    android:id="@+id/profile_phoneno"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Phone Number"
-                    android:inputType="number"
-                    android:paddingLeft="@dimen/sixteen"
-                    android:paddingRight="@dimen/sixteen"
-                    android:nextFocusRight="@+id/profile_address"
-                    android:singleLine="true"/>
-
-            </android.support.design.widget.TextInputLayout>
-
-            <ImageView
-                android:id="@+id/profile_address_icon"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:src="@drawable/ic_location"
-                android:layout_marginLeft="@dimen/sixteen"
-                android:layout_marginRight="@dimen/sixteen"
-                android:layout_alignTop="@+id/profile_address_layout"
-                android:layout_alignBottom="@+id/profile_address_layout"/>
-
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/profile_address_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/profile_phoneno_layout"
-                android:layout_toRightOf="@+id/profile_address_icon"
-                android:layout_marginTop="@dimen/eight"
-                android:layout_marginRight="@dimen/sixteen">
-
-                <EditText
-                    android:id="@+id/profile_address"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Address"
-                    android:paddingLeft="@dimen/sixteen"
-                    android:paddingRight="@dimen/sixteen"
-                    android:nextFocusRight="@+id/profile_bio"
-                    android:singleLine="true"/>
-
-            </android.support.design.widget.TextInputLayout>
-
-            <ImageView
-                android:id="@+id/profile_address_icon2"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:src="@drawable/ic_location"
-                android:layout_marginLeft="@dimen/sixteen"
-                android:layout_marginRight="@dimen/sixteen"
-                android:layout_alignTop="@+id/profile_zipcode_layout"
-                android:layout_alignBottom="@+id/profile_zipcode_layout"/>
-
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/profile_zipcode_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/profile_address_layout"
-                android:layout_toRightOf="@+id/profile_address_icon"
-                android:layout_marginTop="@dimen/eight"
-                android:layout_marginRight="@dimen/sixteen">
-
-                <EditText
-                    android:id="@+id/profile_zipcode"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Zipcode"
-                    android:inputType="number"/>
-
-            </android.support.design.widget.TextInputLayout>
-
-            <ImageView
-                android:id="@+id/profile_bio_icon"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:src="@drawable/ic_info"
-                android:layout_marginLeft="@dimen/sixteen"
-                android:layout_marginRight="@dimen/sixteen"
-                android:layout_alignTop="@+id/profile_bio_layout"
-                android:layout_alignBottom="@+id/profile_bio_layout"/>
-
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/profile_bio_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/profile_zipcode_layout"
-                android:layout_toRightOf="@+id/profile_address_icon"
-                android:layout_marginTop="@dimen/eight"
-                android:layout_marginRight="@dimen/sixteen">
-
-                <EditText
-                    android:id="@+id/profile_bio"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Bio"
-                    android:paddingLeft="@dimen/sixteen"
-                    android:paddingRight="@dimen/sixteen"
-                    android:nextFocusRight="@+id/profile_zipcode"
-                    android:singleLine="true"/>
-
-            </android.support.design.widget.TextInputLayout>
-
-            <ImageView
-                android:id="@+id/vehicle_icon"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:src="@drawable/ic_info"
-                android:layout_marginLeft="@dimen/sixteen"
-                android:layout_marginRight="@dimen/sixteen"
-                android:layout_alignTop="@+id/spinner_vehicletype"
-                android:layout_alignBottom="@+id/spinner_vehicletype"/>
-
-            <Spinner
-                android:id="@+id/spinner_vehicletype"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/fortyeight"
-                android:layout_below="@+id/profile_bio_layout"
-                android:layout_toRightOf="@+id/vehicle_icon"
-                android:paddingRight="@dimen/sixteen"
-                android:layout_marginTop="@dimen/eight"
-                android:layout_marginRight="@dimen/sixteen"/>
-
-            <Button
-                android:layout_below="@+id/spinner_vehicletype"
-                android:id="@+id/submitregistration"
-                android:text="Submit"
-                android:textColor="#fff"
-                android:background="@color/colorPrimary"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content" />
-
-        </RelativeLayout>
+                </RelativeLayout>
+            </android.support.v7.widget.CardView>
+    </LinearLayout>
 
     </android.support.v4.widget.NestedScrollView>
-
 </android.support.design.widget.CoordinatorLayout>

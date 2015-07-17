@@ -83,7 +83,7 @@ public class MainActivity extends ActionBarActivity implements CompoundButton.On
          * Profile Image Setup on Navigationview
          */
         ImageView imageViewRound = (ImageView) findViewById(R.id.imageView_round);
-        Bitmap icon = BitmapFactory.decodeResource(getResources(), R.drawable.jennifer);
+        Bitmap icon = BitmapFactory.decodeResource(getResources(), R.drawable.profile);
         imageViewRound.setImageBitmap(icon);
 
         SwitchCompat switchCompat = (SwitchCompat) findViewById(R.id
@@ -172,7 +172,7 @@ public class MainActivity extends ActionBarActivity implements CompoundButton.On
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        System.out.print(response);
+                        Log.i("response toggle state = ", response);
                     }
                 }, new Response.ErrorListener() {
 
@@ -188,15 +188,13 @@ public class MainActivity extends ActionBarActivity implements CompoundButton.On
             public String getBodyContentType() {
                 return "application/x-www-form-urlencoded; charset=UTF-8";
             }
-
-//            @Override
-//            protected Map<String, String> getParams() throws AuthFailureError {
-//                HashMap<String, String> map = new HashMap<String, String>();
-//                map.put("URL",Constants.TOGGLE_STATE );
-//                map.put("Params.ID", "manual");
-//                map.put("Params.TOKEN", "manual");
-//                return map;
-//            }
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> map = new HashMap<String, String>();
+                map.put(Constants.USERID, Utility.getFromSharedPrefs(MainActivity.this, Constants.USERID));
+                map.put(Constants.TOKEN, Utility.getFromSharedPrefs(MainActivity.this, Constants.TOKEN));
+                return map;
+            }
 
         };
 
@@ -206,14 +204,5 @@ public class MainActivity extends ActionBarActivity implements CompoundButton.On
         return false;
     }
 
-/*
-    public boolean emailValidator(String email) {
-        Pattern pattern;
-        Matcher matcher;
-        final String EMAIL_PATTERN = "^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
-        pattern = Pattern.compile(EMAIL_PATTERN);
-        matcher = pattern.matcher(email);
-        return matcher.matches();
-    }*/
 
 }

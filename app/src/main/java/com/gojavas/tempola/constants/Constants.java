@@ -35,4 +35,5 @@ public class Constants {
 
     public static final String TOGGLE_STATE = BASE_URL + "togglestate";
 
+    public static final String CHECK_STATE =  BASE_URL + "checkstate";
 }

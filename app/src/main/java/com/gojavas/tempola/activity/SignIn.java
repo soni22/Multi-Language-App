@@ -68,7 +68,7 @@ public class SignIn extends AppCompatActivity implements View.OnClickListener{
         et_email=(EditText)findViewById(R.id.signin_email);
         et_password=(EditText)findViewById(R.id.signin_password);
 
-        et_email.setText("varunjain@abc.com");
+        et_email.setText("anshul.goel@gojavas.com");
         et_password.setText("123456");
 
         progressDialog=new ProgressDialog(SignIn.this);
@@ -148,9 +148,7 @@ public class SignIn extends AppCompatActivity implements View.OnClickListener{
                     }else {
                         Utility.showToast(SignIn.this,"Check Play services");
                     }
-
-//                    validateUser();
-                }
+}
 
 
                 break;
@@ -252,8 +250,8 @@ public class SignIn extends AppCompatActivity implements View.OnClickListener{
                                 Intent intent=new Intent(SignIn.this, SendLocation.class);
                                 startService(intent);
 
-                                Intent intentSubmit=new Intent(SignIn.this,MainActivity.class);
-                                startActivity(intentSubmit);
+                                CheckState();
+
 
 
                             }
@@ -338,5 +336,55 @@ public class SignIn extends AppCompatActivity implements View.OnClickListener{
             return false;
         }
         return true;
+    }
+
+
+
+    private boolean CheckState(){
+
+        StringRequest jsonObjRequest = new StringRequest(Request.Method.POST,
+                Constants.CHECK_STATE,
+                new Response.Listener<String>() {
+
+                    @Override
+                    public void onResponse(String response) {
+
+                        Log.i("response check state = ", response);
+
+                        Intent intentSubmit=new Intent(SignIn.this,MainActivity.class);
+                        startActivity(intentSubmit);
+
+
+                    }
+                }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.d("volley", "Error: " + error.getMessage());
+                error.printStackTrace();
+
+            }
+        }) {
+
+            @Override
+            public String getBodyContentType() {
+                return "application/x-www-form-urlencoded; charset=UTF-8";
+            }
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> map = new HashMap<String, String>();
+                map.put(Constants.USERID,Utility.getFromSharedPrefs(SignIn.this, Constants.USERID));
+                map.put(Constants.TOKEN, Utility.getFromSharedPrefs(SignIn.this, Constants.TOKEN));
+
+                return map;
+            }
+
+        };
+
+        TempolaApplication.getInstance().addToRequestQueue(jsonObjRequest);
+
+
+        return false;
     }
 }
