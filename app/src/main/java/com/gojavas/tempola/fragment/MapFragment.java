@@ -1,8 +1,10 @@
 package com.gojavas.tempola.fragment;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.location.Location;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -71,7 +73,7 @@ public class MapFragment extends Fragment implements View.OnClickListener, Locat
     private static final long INTERVAL = 1000 * 60 * 1; //1 minute
     private static final long FASTEST_INTERVAL = 1000 * 60 * 1; // 1 minute
     Button btnFusedLocation;
-    TextView tvLocation, btn_time, btn_distance,tv_userName,tv_userAddress;
+    TextView tvLocation, btn_time, btn_distance,tv_userName,tv_userAddress,tv_disttance,tv_time;
     ImageView iv_userImage;
     LocationRequest mLocationRequest;
     GoogleApiClient mGoogleApiClient;
@@ -82,10 +84,10 @@ public class MapFragment extends Fragment implements View.OnClickListener, Locat
     LinearLayout linearLayout_accept_reject;
     RelativeLayout mMapBottomLayout,userDetailLayout;
     Button btn_accept,btn_rejected,btn_tripcompleted_driverwalkstarted;
-    FloatingActionButton btn_call;
     ProgressDialog progressDialog;
     LocationUtils  locationUtils;
     Marker driver_marker,client_marker;
+    FloatingActionButton btn_call;
 
     private final static int DELAY = 10000;
     private final Handler handler = new Handler();
@@ -155,6 +157,8 @@ public class MapFragment extends Fragment implements View.OnClickListener, Locat
 
         linearLayout_accept_reject=(LinearLayout)rootView.findViewById(R.id.notification_layout);
         mMapBottomLayout=(RelativeLayout)rootView.findViewById(R.id.map_bottom_layout);
+        tv_time=(TextView)rootView.findViewById(R.id.map_time);
+        tv_disttance=(TextView)rootView.findViewById(R.id.map_distance);
 
         btn_accept=(Button)rootView.findViewById(R.id.map_accepted);
         btn_rejected=(Button)rootView.findViewById(R.id.map_rejected);
@@ -163,7 +167,7 @@ public class MapFragment extends Fragment implements View.OnClickListener, Locat
         btn_call=(FloatingActionButton)rootView.findViewById(R.id.map_call);
         btn_distance=(TextView)rootView.findViewById(R.id.map_distance);
         btn_time=(TextView)rootView.findViewById(R.id.map_time);
-
+        btn_call=(FloatingActionButton)rootView.findViewById(R.id.map_call);
 
         btn_accept.setOnClickListener(this);
         btn_rejected.setOnClickListener(this);
@@ -269,7 +273,7 @@ locationUtils.googleApiConnect();
 //        options.icon(BitmapDescriptorFactory.fromBitmap(iconFactory.makeIcon(mLastUpdateTime)));
 //        options.anchor(iconFactory.getAnchorU(), iconFactory.getAnchorV());
 
-        BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.drawable.profile);
+        BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.drawable.ic_location);
 
         LatLng currentLatLng = new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
 
@@ -280,6 +284,9 @@ locationUtils.googleApiConnect();
         }
         options.position(currentLatLng);
 //googleMap.clear();
+        if (driver_marker!=null)
+        driver_marker.remove();
+
         driver_marker = googleMap.addMarker(options);
         long atTime = mCurrentLocation.getTime();
         mLastUpdateTime = DateFormat.getTimeInstance().format(new Date(atTime));
@@ -354,6 +361,7 @@ locationUtils.googleApiConnect();
 
     switch (v.getId()){
 
+
         case R.id.map_accepted:
 
             Map<String, String> params = new HashMap<String, String>();
@@ -385,6 +393,16 @@ locationUtils.googleApiConnect();
 
 
         case R.id.map_call:
+            DogRequestEntity dogRequestEntity=DogRequestHelper.getInstance().getDogRequest
+                    (Utility
+                            .getFromSharedPrefs
+                                    (getActivity(),Constants.REQUEST_ID));
+
+            Intent intent = new Intent(Intent.ACTION_CALL);
+            intent.setData(Uri.parse("tel:" + dogRequestEntity.getPhone()));
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+
             break;
 
 
